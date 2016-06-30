@@ -17,5 +17,5 @@ define( ["client.property-panel/components/components", "client.property-panel/c
 			};			
 		}],
 	};
-  return components.addComponent("pp-climber", component), component
+  return components.addComponent("pp-cl-horizontalselectionbar", component), component
 });

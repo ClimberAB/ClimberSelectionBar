@@ -235,7 +235,7 @@ define([
   var about = {
     //ref: "props.imgSrc",
     //type: "string",
-    component: "pp-climber",
+    component: "pp-cl-horizontalselectionbar",
     translation: "Common.About",
     show: true,
     //defaultValue: "/extensions/cl-horizontalselectionbar/lib/js/components/pp-climber/climber-logo-small.png",

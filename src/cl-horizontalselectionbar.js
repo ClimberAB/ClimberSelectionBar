@@ -43,9 +43,9 @@ function($, _, qlik, $q, $http, props, initProps, extensionUtils, dimension, css
     },
 
     paint: function ($element, layout) {
+      console.log('paint', this);
       this.$scope.sizeMode = ($(document).width() < this.$scope.resolutionBreakpoint) ? 'SMALL':'';
 
-      this.$scope._inAnalysisState = this._inAnalysisState;
       this.$scope.setFields(layout.kfLists);
       this.$scope.props = layout.props;
 
@@ -67,7 +67,7 @@ function($, _, qlik, $q, $http, props, initProps, extensionUtils, dimension, css
         selectionMode: '',
       };
 
-      $scope._inAnalysisState = false;
+      $scope._inAnalysisState = true;
       $scope.resolutionBreakpoint = 1024;
       $scope.sizeMode = '';
 
@@ -156,7 +156,8 @@ function($, _, qlik, $q, $http, props, initProps, extensionUtils, dimension, css
       //      HANDLE SELECTIONS
       //*******************************
       $scope.selectValue = function (event, field, item, bool) {
-        if ($scope._inAnalysisState) {
+        console.log('selectValue',$scope);
+        if ($scope.$parent.object._inAnalysisState) {
           if (event.ctrlKey) {
             $scope.selectFieldValues(field, [$scope.getValue(item)], false);
           } else {
@@ -305,7 +306,7 @@ function($, _, qlik, $q, $http, props, initProps, extensionUtils, dimension, css
       };
 
       $scope.onSwipeStart = function($event) {
-        if ($scope._inAnalysisState) {
+        if ($scope.$parent.object._inAnalysisState) {
           var target = $($event.target);
           var idx = $($event.target).index();
           var field = target.attr('field');
@@ -332,7 +333,7 @@ function($, _, qlik, $q, $http, props, initProps, extensionUtils, dimension, css
       };
 
       $scope.onSwipeUpdate = function ($event) {
-        if ($scope._inAnalysisState) {
+        if ($scope.$parent.object._inAnalysisState) {
           var target = $($event.originalEvent.target);
           var field = target.attr('field');
           if (field == $scope.selections.field) {
@@ -383,7 +384,7 @@ function($, _, qlik, $q, $http, props, initProps, extensionUtils, dimension, css
       };
 
       $scope.onSwipe = function ($event) {
-        if ($scope._inAnalysisState) {
+        if ($scope.$parent.object._inAnalysisState) {
           $scope.selections.swipe_idx_min = -1;
           $scope.selections.swipe_idx_max = -1;
 

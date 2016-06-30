@@ -1,0 +1,1 @@
+define([],function(){"use strict";return{showTitles:!1,props:{showLabels:!1,floatMode:"LEFT",initSelectionMode:"ONCE"}}});

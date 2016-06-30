@@ -1,0 +1,33 @@
+<div qv-extension style="height: 100%; position: relative; overflow: auto;">
+	<div ng-repeat="field in fields"
+		ng-if="showField(field)"
+		class="container {{sizeMode}}"
+		ng-class="layout.props.floatMode">
+		<div class="container-label"><span ng-show="layout.props.showLabels">{{field.label}}</span><div>
+		<div class="lui-buttongroup" ng-if="field.type != 'VARIABLE'">
+			<button ng-repeat="item in field.data"
+			class="lui-button {{field.type}}"
+			ng-class="item[0].qState"
+			cl-swipestart="onSwipeStart($event)"
+			cl-swipeupdate="onSwipeUpdate($event)"
+			cl-swipecancel="onSwipeCancel($event)"
+			cl-swipe="onSwipe($event)"
+			datavalue="{{getValue(item[0])}}"
+			field="{{field.field}}"
+			cl-activate="selectValue($event,field.field, item[0], true)"><span ng-if="field.type == 'FIELD'">{{item[0].qText}}</span><img ng-if="field.type == 'FLAG'" ng-src="{{item.icon}}"></button>
+		</div>
+		<div  ng-if="field.type == 'VARIABLE'">
+			<label ng-repeat="item in field.data" class="lui-radiobutton">
+				<input class="lui-radiobutton__input" type="radio" ng-model="field.variableValue" ng-value="item.value" ng-change="setVariable(field.variable, item.value, item.altDim)">
+				<div
+					class="lui-radiobutton__radio-wrap">
+					<span class="lui-radiobutton__radio"></span>
+					<span class="lui-radiobutton__radio-text">{{item.value}}</span>
+				</div>
+				</input>
+			</label>
+		</div>
+	</div>
+</div>
+</div>
+</div>

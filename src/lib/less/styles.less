@@ -1,0 +1,150 @@
+// Main Styles (included in _root.less)
+.container {
+  font-family: "QlikView Sans",sans-serif;
+  margin:0px 4px;
+}
+
+div.container   {
+  margin-left: 0px;
+  margin-right: 20px;
+}
+
+div.container.RIGHT   {
+  margin-right: 0px;
+  margin-left: 20px;
+}
+
+div.container.LEFT:last-child   {
+  margin-right: 0px;
+}
+
+div.container.RIGHT:last-child   {
+  margin-right: 0px;
+  margin-left: 20px;
+}
+
+div.container.STACK:last-child   {
+  margin-right: 0px;
+}
+
+.LEFT {
+  float:left;
+  display:inline;
+}
+.RIGHT {
+  float:right;
+  display:inline;
+}
+.STACK {
+  clear: both;
+  display:block;
+}
+
+.container-label {
+  color:#595959;
+  margin-bottom:0px;
+  display:inline;
+  font-weight: bold;
+}
+
+button.lui-button  {
+  min-width: 0px;
+  font-weight: normal;
+  font-size: 13px;
+  padding:0px 8px 0px 8px;
+}
+
+.FIELD span {
+  pointer-events: none;  
+}
+
+.FLAG img {
+  pointer-events: none;
+  height: 18px;
+  min-width: 24px;
+  padding:4px 0px 2px 0px;
+}
+
+.lui-button.A {
+  background:#ddd;
+  color: @defaultTextColor;
+}
+.lui-button.X {
+  background:#A9A9A9;
+  color: #ffffff;
+}
+
+.lui-button.S {
+  background:@selectedColor;
+  color: #ffffff;
+}
+
+.lui-button.XS {
+  background: #A9A9A9;
+  color: #ffffff;
+}
+
+label.lui-radiobutton {
+  float: left;
+  display:inline;
+}
+
+div.lui-radiobutton__radio-wrap {
+  margin: 5px 7px 5px 0px;
+}
+
+.lui-radiobutton .lui-radiobutton__input:checked + .lui-radiobutton__radio-wrap .lui-radiobutton__radio {
+  background: @selectedColor;
+  border-color: transparent;
+}
+
+span.lui-radiobutton__radio-text {
+  padding-left: 1px;
+  font-weight: normal;
+  font-size: 13px;
+}
+
+
+.SMALL button.lui-button  {
+  height: 24px;
+  font-size: 10px;
+  padding:0px 6px 1px 6px;
+}
+
+.SMALL .FLAG img {
+  height: 14px;
+  min-width: 24px;
+}
+
+.SMALL span.lui-radiobutton__radio {
+  height: 18px;
+  width: 18px;
+}
+
+.SMALL .lui-radiobutton__radio::after {
+    width: 8px;
+    height: 8px;
+    top: 4px;
+    left: 4px;
+}
+
+.SMALL span.lui-radiobutton__radio-text {
+  font-size: 10px;
+}
+
+.SMALL div.lui-radiobutton__radio-wrap {
+  margin: 2px 4px 2px 0px;
+}
+
+div.container.SMALL    {
+  margin-right: 12px;
+}
+div.container.RIGHT.SMALL    {
+  margin-left: 12px;
+}
+
+div.container.RIGHT.SMALL:last-child   {
+  margin-left: 12px;
+}
+
+

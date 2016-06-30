@@ -1,0 +1,10 @@
+{
+	"name" : "Climber Selection Bar",
+	"description" : "A horizontal selection bar for Qlik Sense. Uses fields, variables and flags.",
+	"icon" : "filterpane",
+	"type" : "visualization",
+	"version": "@@version",
+	"preview" : "climberselectionbar.png",
+	"author": "Karl Fredberg Sjöstrand",
+	"dependencies" : { "qlik-sense" : ">=3.0.x" }
+}

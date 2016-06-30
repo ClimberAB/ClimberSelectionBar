@@ -14,6 +14,7 @@ Works only with Qlik Sense 3.0 and up!!
 3. Flags - Easy country selection where you don't have room for a map but want something that looks nice.
 ![Alt text](https://github.com/ClimberAB/ClimberSelectionBar/blob/master/screenshots/screenshot_flag.PNG?raw=true "Screenshot flags")
 4. Initial selection - Any field/variable can be set for an initial selection. 
+
 ![Alt text](https://github.com/ClimberAB/ClimberSelectionBar/blob/master/screenshots/screenshot_initial_selection.PNG?raw=true "Screenshot initial selection")
 
 ## Installation

@@ -25,7 +25,6 @@ Works only with Qlik Sense 3.0 and up!!
 	* See instructions [how to import an extension on Qlik Sense Server](http://help.qlik.com/sense/en-us/developer/#../Subsystems/Workbench/Content/BuildingExtensions/HowTos/deploy-extensions.htm)
 
 ## Configuration
-![Alt text](https://github.com/ClimberAB/ClimberSelectionBar/blob/master/screenshots/screenshot_add_list.PNG?raw=true "Add list")
 
 * Select the typ of list you need (Field,Variable or Flag) 
 * Enter a reference to:

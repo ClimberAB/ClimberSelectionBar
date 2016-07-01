@@ -67,7 +67,6 @@ function($, _, qlik, $q, $http, props, initProps, extensionUtils, dimension, css
         selectionMode: '',
       };
 
-      $scope._inAnalysisState = true;
       $scope.resolutionBreakpoint = 1024;
       $scope.sizeMode = '';
 
@@ -306,7 +305,7 @@ function($, _, qlik, $q, $http, props, initProps, extensionUtils, dimension, css
       };
 
       $scope.onSwipeStart = function($event) {
-        if ($scope.$parent.object._inAnalysisState) {
+        //if ($scope.$parent.object._inAnalysisState) {
           var target = $($event.target);
           var idx = $($event.target).index();
           var field = target.attr('field');
@@ -329,11 +328,11 @@ function($, _, qlik, $q, $http, props, initProps, extensionUtils, dimension, css
               target.addClass('X');
             }
           }
-        }
+        //}
       };
 
       $scope.onSwipeUpdate = function ($event) {
-        if ($scope.$parent.object._inAnalysisState) {
+        //if ($scope.$parent.object._inAnalysisState) {
           var target = $($event.originalEvent.target);
           var field = target.attr('field');
           if (field == $scope.selections.field) {
@@ -375,7 +374,7 @@ function($, _, qlik, $q, $http, props, initProps, extensionUtils, dimension, css
               });
             }
           }
-        }
+        //}
       };
 
       $scope.onSwipeCancel = function ($event) {
@@ -384,16 +383,16 @@ function($, _, qlik, $q, $http, props, initProps, extensionUtils, dimension, css
       };
 
       $scope.onSwipe = function ($event) {
-        if ($scope.$parent.object._inAnalysisState) {
-          $scope.selections.swipe_idx_min = -1;
-          $scope.selections.swipe_idx_max = -1;
+        //if ($scope.$parent.object._inAnalysisState) {
+        $scope.selections.swipe_idx_min = -1;
+        $scope.selections.swipe_idx_max = -1;
 
-          if ($scope.selections.values_to_select !== []) {
-            $scope.selectFieldValues($scope.selections.field, $scope.selections.values_to_select, true);
-            $scope.selections.values_to_select = [];
-          }
-          $scope.selections.field = '';
+        if ($scope.selections.values_to_select !== []) {
+          $scope.selectFieldValues($scope.selections.field, $scope.selections.values_to_select, true);
+          $scope.selections.values_to_select = [];
         }
+        $scope.selections.field = '';
+        //}
       };
     }],
   };

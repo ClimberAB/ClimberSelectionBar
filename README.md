@@ -46,7 +46,7 @@ I cannot guarantee that I will merge all PRs.
 
 ## Author
 
-**Karl Fredberg @ Climber**
+**Karl Fredberg Sjöstrand @ Climber**
 * http://github.com/ClimberAB
 
 

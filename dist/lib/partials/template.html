@@ -14,7 +14,7 @@
 			cl-swipe="onSwipe($event)"
 			datavalue="{{getValue(item[0])}}"
 			field="{{field.field}}"
-			cl-activate="selectValue($event,field.field, item[0], true)"><span ng-if="field.type == 'FIELD'">{{item[0].qText}}</span><img ng-if="field.type == 'FLAG'" ng-src="{{item.icon}}"></button>
+			ng-click="selectValue($event,field.field, item[0], true)"><span ng-if="field.type == 'FIELD'">{{item[0].qText}}</span><img ng-if="field.type == 'FLAG'" ng-src="{{item.icon}}"></button>
 		</div>
 		<div  ng-if="field.type == 'VARIABLE'">
 			<label ng-repeat="item in field.data" class="lui-radiobutton">

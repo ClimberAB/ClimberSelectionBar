@@ -8,13 +8,13 @@ Works only with Qlik Sense 3.0 and up!!
 
 ## Screenshots
 1. Field - Standard horizontal selection from any field in the application. Intended for use with Year/Month field but will of course work with any field.  
-![Alt text](https://github.com/ClimberAB/ClimberSelectionBar/blob/master/screenshots/screenshot_field.PNG?raw=true "Horizontal field selection")
+![Alt text](/screenshots/screenshot_field.PNG?raw=true "Horizontal field selection")
 2. Variable - For variable selection of single ("always one selected") variable. Typical use is for currency selection.  
-![Alt text](https://github.com/ClimberAB/ClimberSelectionBar/blob/master/screenshots/screenshot_variable.PNG?raw=true "Horizontal variable selection")
+![Alt text](/screenshots/screenshot_variable.PNG?raw=true "Horizontal variable selection")
 3. Flags - Easy country selection where you don't have room for a map but want something that looks nice.  
-![Alt text](https://github.com/ClimberAB/ClimberSelectionBar/blob/master/screenshots/screenshot_flag.PNG?raw=true "Screenshot flags")
+![Alt text](/screenshots/screenshot_flag.PNG?raw=true "Screenshot flags")
 4. Initial selection - Any field/variable can be set for an initial selection using an expression or comma separated list.  
-![Alt text](https://github.com/ClimberAB/ClimberSelectionBar/blob/master/screenshots/screenshot_initial_selection.PNG?raw=true "Screenshot initial selection")
+![Alt text](/screenshots/screenshot_initial_selection.PNG?raw=true "Screenshot initial selection")
 ## Installation
 
 1. Download the latest version of Qlik Sense (3.0 or higher)

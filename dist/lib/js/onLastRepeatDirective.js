@@ -1,0 +1,1 @@
+define(["qvangular"],function(a){"use strict";a.directive("onLastRepeat",function(){return function(a,b,c){a.$last&&setTimeout(function(){a.$emit("onRepeatLast",b,c)},1)}})});

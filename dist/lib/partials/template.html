@@ -1,10 +1,18 @@
-<div qv-extension style="height: 100%; position: relative; overflow: auto;">
+<div qv-extension id="container" style="height: 100%; position: relative; overflow: auto;" ng-class="getClass()">
+<!--div class="bootstrap">
+	<div id="daterange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
+    	<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
+    	<span></span> <b class="caret"></b>
+	</div>
+</div> <-->
+	
 	<div ng-repeat="field in fields"
+		on-last-repeat
 		ng-if="showField(field)"
 		class="container {{sizeMode}}"
 		ng-class="layout.props.floatMode">
 		<div class="container-label"><span ng-show="layout.props.showLabels">{{field.label}}</span><div>
-		<div class="lui-buttongroup" ng-if="field.type != 'VARIABLE'">
+		<div class="lui-buttongroup" ng-if="field.type == 'FIELD' || field.type === 'FLAG'">
 			<button ng-repeat="item in field.data"
 			class="lui-button {{field.type}}"
 			ng-class="item[0].qState"
@@ -16,9 +24,15 @@
 			field="{{field.field}}"
 			ng-click="selectValue($event,field.field, item[0], true)"><span ng-if="field.type == 'FIELD'">{{item[0].qText}}</span><img ng-if="field.type == 'FLAG'" ng-src="{{item.icon}}"></button>
 		</div>
-		<div  ng-if="field.type == 'VARIABLE'">
+		<div class="bootstrap" ng-if="field.type == 'DATERANGE'">
+			<div id="{{'daterange-' + $parent.qId + '-' + field.id}}" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
+    			<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
+    			<span>{{field.displayText}}</span> <b class="caret"></b>
+			</div>
+		</div>
+		<div ng-if="field.type == 'VARIABLE'">
 			<label ng-repeat="item in field.data" class="lui-radiobutton">
-				<input class="lui-radiobutton__input" type="radio" ng-model="field.variableValue" ng-value="item.value" ng-change="setVariable(field.variable, item.value, item.altDim)">
+				<input class="lui-radiobutton__input" type="radio" ng-model="field.variableValue" ng-value="item.value" ng-change="setVariable(field.variable, item.value)">
 				<div
 					class="lui-radiobutton__radio-wrap">
 					<span class="lui-radiobutton__radio"></span>

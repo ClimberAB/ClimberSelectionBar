@@ -15,6 +15,8 @@ Works only with Qlik Sense 3.0 and up!!
 ![Alt text](/screenshots/screenshot_flag.PNG?raw=true "Screenshot flags")
 4. Initial selection - Any field/variable can be set for an initial selection using an expression or comma separated list.  
 ![Alt text](/screenshots/screenshot_initial_selection.PNG?raw=true "Screenshot initial selection")
+5. Date range picker (Experimental!) - Drop down calendar for selection of dates
+![Alt text](/screenshots/screenshot_date_range_picker.PNG?raw=true "Date Range Picker")
 ## Installation
 
 1. Download the latest version of Qlik Sense (3.0 or higher)
@@ -25,11 +27,12 @@ Works only with Qlik Sense 3.0 and up!!
 
 ## Configuration
 
-* Select the typ of list you need (Field,Variable or Flag) 
+* Select the typ of list you need (Field,Variable,Flag or Date Range Picker) 
 * Enter a reference to:
 	* Field - Any field or an expression that works as a dimension
 	* Variable - Has to be an existing variable created either in the script or the gui. Selectable variables are entered in a comma separated list.
 	* Flag - Select a field that has a country name corresponding with the flag names. (Has to be a perfect match with the flag name so check the list of flags if you are not sure.)
+	* Date Range Picker - A field holding a date field with a "complete" set of dates. (i.e. no gaps in the timeline)
 * Add a field label 
 * Add an initial selection if you want. This will also work with expressions such as "=Year(Today())-1".
 * You can set initial selections to be set once per session or every time you move to a sheet.

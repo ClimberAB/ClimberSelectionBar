@@ -24,10 +24,11 @@
 			field="{{field.field}}"
 			ng-click="selectValue($event,field.field, item[0], true)"><span ng-if="field.type == 'FIELD'">{{item[0].qText}}</span><img ng-if="field.type == 'FLAG'" ng-src="{{item.icon}}"></button>
 		</div>
-		<div class="bootstrap" ng-if="field.type == 'DATERANGE'">
+		<div class="bootstrap" ng-if="field.type == 'DATERANGE'" title="{{ field.isNotARange ? 'Selection is not a range' : field.displayText}}"title=>
 			<div id="{{'daterange-' + $parent.qId + '-' + field.id}}" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
     			<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
-    			<span>{{field.displayText}}</span> <b class="caret"></b>
+    			<i class="glyphicon glyphicon-exclamation-sign fa fa-exclamation-circle" ng-if="field.isNotARange" style="color:red"></i>
+				<span class="daterange-input">{{field.displayText}}</span> <b class="caret"></b>
 			</div>
 		</div>
 		<div ng-if="field.type == 'VARIABLE'">

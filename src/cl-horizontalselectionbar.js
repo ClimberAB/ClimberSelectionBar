@@ -21,11 +21,13 @@ define([
 function($, _, qlik, $q, $http, props, initProps, stateUtil, fieldApi, extensionUtils, moment, daterangepicker, dimension, cssContent, cssDaterangepicker, ngTemplate) {
   'use strict';
 
+  //Virtual proxy fix for font path
+  var prefix = window.location.pathname.substr( 0, window.location.pathname.toLowerCase().lastIndexOf( "/sense/app/" ) );
+  cssContent = cssContent.replace(new RegExp('__VirtualProxyPrefix__' , 'g'), prefix );
+  
   extensionUtils.addStyleToHeader(cssContent);
   extensionUtils.addStyleToHeader(cssDaterangepicker);  
 
-  ////(end.toDate().getTime() /86400/1000) + 25567 + 1 + utcOffset * 60000 ;
-                  
   function getQSDateNumFromMoment(momentDate) {
     var milli = momentDate.startOf('day').toDate().getTime();
     var offset = momentDate.utcOffset() * 60000;
@@ -130,8 +132,8 @@ function($, _, qlik, $q, $http, props, initProps, stateUtil, fieldApi, extension
               };
               var vToday = item.dateToday;
               var vTodayIsEndOfMonth = moment(vToday).endOf('month').format(item.dateFormat) == moment(vToday).format(item.dateFormat)       
-              var vR12 = vTodayIsEndOfMonth ? [moment(vToday).subtract(12, 'month').startOf('month'), moment(vToday).endOf('month')]
-                                            : [moment(vToday).subtract(13, 'month').startOf('month'), moment(vToday).subtract(1, 'month').endOf('month')];
+              var vR12 = vTodayIsEndOfMonth ? [moment(vToday).subtract(11, 'month').startOf('month'), moment(vToday).endOf('month')]
+                                            : [moment(vToday).subtract(12, 'month').startOf('month'), moment(vToday).subtract(1, 'month').endOf('month')];
 
               var options = {
                   "showDropdowns": true,
@@ -139,17 +141,17 @@ function($, _, qlik, $q, $http, props, initProps, stateUtil, fieldApi, extension
                          'Yesterday': [moment(vToday), moment(vToday)],
                          'Last 7 Days': [moment(vToday).subtract(6, 'days'), moment(vToday)],
                          'Last 14 Days': [moment(vToday).subtract(13, 'days'), moment(vToday)],
-                         'Last 28 Days': [moment(vToday).subtract(37, 'days'), moment(vToday)],
+                         'Last 28 Days': [moment(vToday).subtract(27, 'days'), moment(vToday)],
                          'Month to Date': [moment(vToday).startOf('month'), moment(vToday)],
-                         'Year to Date': [moment(vToday).startOf('month'), moment(vToday)],
-                         'Rolling 12 months': vR12,
+                         'Last Month': [moment(vToday).subtract(1, 'month').startOf('month'), moment(vToday).subtract(1, 'month').endOf('month')],      
+                         'Year to Date': [moment(vToday).startOf('year'), moment(vToday)],
+                         'Rolling 12 months': vR12
                          //'This Month': [moment(vToday).startOf('month'), moment(vToday).endOf('month')],
-                         'Last Month': [moment(vToday).subtract(1, 'month').startOf('month'), moment(vToday).subtract(1, 'month').endOf('month')]        
                   },
                   "locale": {
                     "format": item.dateFormat,                    
                     },
-                  "alwaysShowCalendars": true,
+                  "alwaysShowCalendars": false,
                   "parentEl": "#" + daterangepickerContainerId,                  
               };
               
@@ -260,17 +262,21 @@ function($, _, qlik, $q, $http, props, initProps, stateUtil, fieldApi, extension
               var dateMin = getDateFromDateNumberWithFormat(item.daterangeMinValue, item.dateFormat);
               var dateMax = getDateFromDateNumberWithFormat(item.daterangeMaxValue, item.dateFormat);
               var dateToday = getDateFromDateNumberWithFormat(item.dateTodayValue, item.dateFormat);
+              var isNotARange = false;
               //var dateToday = item.dateTodayValue != null ? moment(getMillisecondFromDateNumber(item.dateTodayValue), 'X').utc().format(item.dateFormat) : null;
 
               if (item.qListObject.qDimensionInfo.qStateCounts.qSelected > 0) {
                if (item.qListObject.qDimensionInfo.qStateCounts.qSelected < (item.dateMaxValue - item.dateMinValue + 1)) {
-                  displayText = "Selection is not a range";
-                } else {
-                  dateStart = getDateFromDateNumberWithFormat(item.dateMinValue, item.dateFormat); 
-                  dateEnd = getDateFromDateNumberWithFormat(item.dateMaxValue, item.dateFormat);                  
-                  displayText = getDateFromDateNumberWithFormat(item.dateMinValue, item.displayDateFormat) + ' - ' + getDateFromDateNumberWithFormat(item.dateMaxValue, item.displayDateFormat);
+                  isNotARange = true;
                 }
+                dateStart = getDateFromDateNumberWithFormat(item.dateMinValue, item.dateFormat); 
+                dateEnd = getDateFromDateNumberWithFormat(item.dateMaxValue, item.dateFormat);                  
+                displayText = getDateFromDateNumberWithFormat(item.dateMinValue, item.displayDateFormat) + ' - ' + getDateFromDateNumberWithFormat(item.dateMaxValue, item.displayDateFormat);
+              } else {
+                displayText = 'Select a date range';
               }
+
+                
               //start.format(item.displayDateFormat) + ' - ' + end.format(item.displayDateFormat)
               newFields.push({
                 field: item.qListObject.qDimensionInfo.qGroupFieldDefs[0],
@@ -282,6 +288,7 @@ function($, _, qlik, $q, $http, props, initProps, stateUtil, fieldApi, extension
                 dateFormat: item.dateFormat,
                 displayDateFormat: item.displayDateFormat,
                 displayText: displayText,
+                isNotARange: isNotARange,
                 dateStart: dateStart,
                 dateEnd: dateEnd,
                 dateToday: dateToday,

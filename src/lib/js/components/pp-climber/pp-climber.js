@@ -1,7 +1,4 @@
-define( ["client.property-panel/components/components", "client.property-panel/component-utils", "translator", "require"], function (components, componentUtils, translator, require) {
-	
-	var ngTemplate = '<div><a href="http://goo.gl/0TzmFM" target="_blank" title="climber.eu" style="height:0px;"><img style="max-width:250px" qva-prevent-drag ng-if="label" title="climber.eu" alt="climber.eu" ng-src="/extensions/cl-customreport/lib/js/components/pp-climber/pp-climber-customreport.png" style="padding:0px;"/></a></div>';
-
+define( ["client.property-panel/components/components", "client.property-panel/component-utils", "translator", "text!./template.html", "require"], function (components, componentUtils, translator, ngTemplate,require) {
 	var component = {
 		template: ngTemplate,
 		controller: ["$scope", function ($scope) {			
@@ -20,5 +17,5 @@ define( ["client.property-panel/components/components", "client.property-panel/c
 			};			
 		}],
 	};
-  return components.addComponent("pp-cl-customreport", component), component
+  return components.addComponent("pp-cl-horizontalselectionbar", component), component
 });

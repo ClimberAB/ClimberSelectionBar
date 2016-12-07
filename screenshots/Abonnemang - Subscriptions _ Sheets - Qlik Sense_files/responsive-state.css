@@ -1,0 +1,16 @@
+
+@media screen and (orientation: portrait) {
+  #-mqa-alias-portrait {
+    
+  }
+}
+@media screen and (max-width: 640px), screen and (max-height: 480px) {
+  #-mqa-alias-smalldevice {
+    
+  }
+}
+@media screen and (min-width: 940px) and (min-height: 481px) {
+  #-mqa-alias-aboutDialogShowCircles {
+    
+  }
+}

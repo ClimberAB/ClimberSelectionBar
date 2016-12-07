@@ -1,0 +1,32 @@
+.qvt-gridcell.zoom {
+  background-color: #FFFFFF;
+}
+.qvt-gridcell .zoomBorder {
+  background-color: #FFFFFF;
+  border: 2px solid #B3B3B3;
+}
+.qvt-sheet {
+  background-color: #FFFFFF;
+  color: #595959;
+}
+.qvt-sheet-expand-button {
+  color: rgba(102, 102, 102, 0.6);
+  background-color: rgba(255, 255, 255, 0.9);
+}
+.qvt-visualization {
+  background-color: inherit;
+}
+.qvt-visualization-title {
+  font-size: 16px;
+  color: #808080;
+}
+.qvt-visualization-subtitle {
+  font-size: 12px;
+  font-weight: normal;
+  color: #808080;
+}
+.qvt-visualization-footnote {
+  font-size: 12px;
+  font-style: italic;
+  color: #808080;
+}

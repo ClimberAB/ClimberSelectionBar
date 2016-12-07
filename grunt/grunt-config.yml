@@ -6,20 +6,20 @@ general:
   LocalExtensionPath:   "C:\\Users\\clkaf\\Documents\\Qlik\\Sense\\Extensions"
 
   # Name of the Extension as defined in the generator
-  ExtensionName:        "Custom Report"
+  ExtensionName:        "HorizontalSelectionBar"
 
   # Name of the Extension, safe to be used for file-names
-  ExtensionNameSafe:    "CustomReport"
+  ExtensionNameSafe:    "HorizontalSelectionBar"
 
   # Namespace
   ExtensionNamespace:   "cl-"
 
   # Description of the Extension as defined in the generator
-  ExtensionDescription: "Custom Report for Qlik Sense"
+  ExtensionDescription: "A horizontal selection bar for Qlik Sense. Uses fields, variables and flags."
 
   # Version of the extension, will be re-used in several areas,
   # e.g the generated .zip-file in the 'release' Grunt-task
-  Version:              "1.0.8"
+  Version:              "1.0.13"
 
 # -------------------------------------------------------------------
 # Settings for the 'dev' Grunt task

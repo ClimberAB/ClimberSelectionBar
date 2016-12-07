@@ -11,6 +11,7 @@ define([
   './lib/js/extensionUtils',
   './lib/js/moment',
   './lib/js/daterangepicker',
+
   'general.models/library/dimension',
   'text!./lib/css/style.css',
   'text!./lib/css/daterangepicker.css',
@@ -18,11 +19,21 @@ define([
   './lib/js/clTouch',
   './lib/js/onLastRepeatDirective',
 ],
-function($, _, qlik, $q, $http, props, initProps, stateUtil, fieldApi, extensionUtils, moment, daterangepicker, dimension, cssContent, cssDaterangepicker, ngTemplate) {
+function($, _, qlik, $q, $http, props, initProps, stateUtil, fieldApi, extensionUtils, moment,  daterangepicker, dimension, cssContent, cssDaterangepicker, ngTemplate) {
   'use strict';
 
   //Virtual proxy fix for font path
   var prefix = window.location.pathname.substr( 0, window.location.pathname.toLowerCase().lastIndexOf( "/sense/app/" ) );
+  console.log('window.location.pathname', window.location.pathname);
+  console.log('prefix', prefix);
+  //IE fix
+  if (prefix) {
+    if (prefix.substr(0,1) != '/') {
+      prefix = '/' + prefix
+    }
+  }
+  console.log('prefix after', prefix);
+
   cssContent = cssContent.replace(new RegExp('__VirtualProxyPrefix__' , 'g'), prefix );
   
   extensionUtils.addStyleToHeader(cssContent);
@@ -52,6 +63,7 @@ function($, _, qlik, $q, $http, props, initProps, stateUtil, fieldApi, extension
       return moment(getMillisecondFromDateNumber(numDate), 'X').utc().format(dateFormat);
     };
 
+    
 
   return {
 
@@ -76,15 +88,38 @@ function($, _, qlik, $q, $http, props, initProps, stateUtil, fieldApi, extension
     },
 
     resize : function ($element, layout) {
-      this.$scope.sizeMode = ($(document).width() <= this.$scope.resolutionBreakpoint) ? 'SMALL':'';
+      this.$scope.setSizeMode($element);
+      //Remove header if new card theme.
+      if($(".qv-card" && !layout.showTitles)){
+        $(".qv-object-cl-horizontalselectionbar").find('header.thin').addClass('no-title')//.css({'height':'5px', 'padding-bottom':'2px'});
+      } else {
+           $(".qv-object-cl-horizontalselectionbar").find('header.thin').removeClass('no-title')//.css({'height':'', 'padding-bottom':''});
+      };
     },
 
     paint: function ($element, layout) {
+
+      this.$scope.setSizeMode($element);
+
+      var app = qlik.currApp()
       console.log('paint', this);
       console.log('layout', layout);
       console.log('fieldApi',fieldApi);
 
-      this.$scope.sizeMode = ($(document).width() < this.$scope.resolutionBreakpoint) ? 'SMALL':'';
+      
+
+      app.getObjectProperties(layout.qInfo.qId).then(function(model){
+          console.log('model',model);
+      }); 
+
+      //Remove header if new card theme.
+      if($(".qv-card" && !layout.showTitles)){
+        $(".qv-object-cl-horizontalselectionbar").find('header.thin').addClass('no-title')//.css({'height':'5px', 'padding-bottom':'2px'});
+      } else {
+           $(".qv-object-cl-horizontalselectionbar").find('header.thin').removeClass('no-title')//.css({'height':'', 'padding-bottom':''});
+      };
+      
+      
 
       this.$scope.setFields(layout.kfLists);
       this.$scope.props = layout.props;
@@ -111,6 +146,8 @@ function($, _, qlik, $q, $http, props, initProps, stateUtil, fieldApi, extension
         selectionMode: '',
       };
 
+      
+
       $scope.$on('onRepeatLast', function(scope, element, attrs){
           //moment.locale('en');
           
@@ -124,7 +161,7 @@ function($, _, qlik, $q, $http, props, initProps, stateUtil, fieldApi, extension
               var daterangepickerId = "daterange-" + $scope.qId + '-' + item.id;
               
               if($("#" + daterangepickerContainerId).length == 0) {
-                $("body").append('<div id="' + daterangepickerContainerId + '" class="bootstrap" style="position: absolute"></div>');
+                $("body").append('<div id="' + daterangepickerContainerId + '" class="bootstrap-horizontalselectionbar" style="position: absolute"></div>');
               }
 
               var onApplyCallback = function(start, end) {
@@ -149,7 +186,8 @@ function($, _, qlik, $q, $http, props, initProps, stateUtil, fieldApi, extension
                          //'This Month': [moment(vToday).startOf('month'), moment(vToday).endOf('month')],
                   },
                   "locale": {
-                    "format": item.dateFormat,                    
+                    "format": item.dateFormat,
+                    "firstDay": 1,                    
                     },
                   "alwaysShowCalendars": false,
                   "parentEl": "#" + daterangepickerContainerId,                  
@@ -173,7 +211,7 @@ function($, _, qlik, $q, $http, props, initProps, stateUtil, fieldApi, extension
           });
       });
 
-      $scope.resolutionBreakpoint = 1024;
+      $scope.resolutionBreakpoint = { 'width': 1024, 'height': 35, 'xsmallheight': 25};
       $scope.sizeMode = '';
 
       $scope.fields = [];
@@ -181,6 +219,18 @@ function($, _, qlik, $q, $http, props, initProps, stateUtil, fieldApi, extension
       $scope.willApplyInitSelections = false;
       $scope.initSelectionsApplied = false;
       $scope.sessionStorageId = $scope.$parent.layout.qExtendsId ? $scope.$parent.layout.qExtendsId : $scope.$parent.layout.qInfo.qId;
+
+      $scope.setSizeMode = function($element) {
+        $scope.sizeMode = ($(document).width() <= $scope.resolutionBreakpoint.width | 
+                            $($element).height() <= $scope.resolutionBreakpoint.height) ? 
+                             ($($element).height() <= $scope.resolutionBreakpoint.xsmallheight ? 'X-SMALL' : 'SMALL' ) : '';
+      }
+
+      $scope.getSizeMode = function() {
+        return ($(document).width() <= $scope.resolutionBreakpoint.width | 
+                            $($element).height() <= $scope.resolutionBreakpoint.height) ? 
+                             ($($element).height() <= $scope.resolutionBreakpoint.xsmallheight ? 'X-SMALL' : 'SMALL' ) : '';
+      }
 
       $scope.getClass = function () {
         return stateUtil.isInAnalysisMode() ? "" : "no-interactions";
@@ -207,22 +257,14 @@ function($, _, qlik, $q, $http, props, initProps, stateUtil, fieldApi, extension
               });
               break;
             case "VARIABLE":
-              var variableValues = item.variableValues ? item.variableValues.split(',') : [];
-              var altDimensions = item.alternativeDimensions ? item.alternativeDimensions.split(',') : [];
-
+              var variableValues = item.variableValues ?  $.map(item.variableValues.split(','), $.trim)  : [];
+              
               var data = [];
 
               for (var i = 0; i < variableValues.length; i++) {
-                if (variableValues.length == altDimensions.length && item.alternativeDim) {
                   data.push({
-                    value: variableValues[i],
-                    altDim: altDimensions[i],
-                  });
-                } else {
-                  data.push({
-                    value: variableValues[i],
-                  });
-                }
+                    value: variableValues[i]
+                  });                
               }
               
               newFields.push({
@@ -241,7 +283,7 @@ function($, _, qlik, $q, $http, props, initProps, stateUtil, fieldApi, extension
               _.each(qMatrix, function (flag) {
                 var iconFilename = flag[0].qText.replace(' ', '-');
                 var newFlag = flag;
-                newFlag.icon = '/Extensions/cl-HorizontalSelectionBar/lib/images/flags/' + iconFilename + '.png'
+                newFlag.icon = prefix + '/Extensions/cl-HorizontalSelectionBar/lib/images/flags/' + iconFilename + '.png'
                 data.push(newFlag);
               });
               newFields.push({
@@ -256,15 +298,18 @@ function($, _, qlik, $q, $http, props, initProps, stateUtil, fieldApi, extension
               });
               break;
             case "DATERANGE":
+            console.log('DateRange',item);
               var displayText = "";
               var dateStart = null;
               var dateEnd = null;
               var dateMin = getDateFromDateNumberWithFormat(item.daterangeMinValue, item.dateFormat);
               var dateMax = getDateFromDateNumberWithFormat(item.daterangeMaxValue, item.dateFormat);
-              var dateToday = getDateFromDateNumberWithFormat(item.dateTodayValue, item.dateFormat);
-              var isNotARange = false;
-              //var dateToday = item.dateTodayValue != null ? moment(getMillisecondFromDateNumber(item.dateTodayValue), 'X').utc().format(item.dateFormat) : null;
+              var dateFromInitSelection = getDateFromDateNumberWithFormat(item.dateFromInitSelectionValue, item.dateFormat);
+              var dateToInitSelection = getDateFromDateNumberWithFormat(item.dateToInitSelectionValue, item.dateFormat);
+              var dateToday = isNaN(item.dateTodayValue) ? moment() : getDateFromDateNumberWithFormat(item.dateTodayValue, item.dateFormat);
 
+              var isNotARange = false;
+              
               if (item.qListObject.qDimensionInfo.qStateCounts.qSelected > 0) {
                if (item.qListObject.qDimensionInfo.qStateCounts.qSelected < (item.dateMaxValue - item.dateMinValue + 1)) {
                   isNotARange = true;
@@ -283,8 +328,8 @@ function($, _, qlik, $q, $http, props, initProps, stateUtil, fieldApi, extension
                 type: item.listType,
                 id: idx,
                 visible: item.listVisible,
-                dateFromInitSelection: item.dateFromInitSelection,
-                dateToInitSelection: item.dateToInitSelection,
+                dateFromInitSelection: dateFromInitSelection,
+                dateToInitSelection: dateToInitSelection,
                 dateFormat: item.dateFormat,
                 displayDateFormat: item.displayDateFormat,
                 displayText: displayText,
@@ -320,6 +365,29 @@ function($, _, qlik, $q, $http, props, initProps, stateUtil, fieldApi, extension
           }
       };
 
+      $scope.selectElemNo = function (event,index, elemNo, bool) {
+          
+          
+          if (event.ctrlKey) {
+             $scope.selectElemNos(index, [elemNo],false, false); 
+
+          } else {
+              $scope.selectElemNos(index, [elemNo],bool, false); 
+          }
+      };
+
+      $scope.selectElemNos = function (index, elemNos, bool) {
+          console.log('elemNo index', index);
+          console.log('elemNo', elemNos);
+
+          var path = '/kfLists/' + index + '/qListObjectDef';
+          console.log('path', path);          
+          
+          $scope.ext.model.enigmaModel.selectListObjectValues(path, elemNos,bool, false); 
+          
+      };
+
+
       $scope.selectDateFromAndTo = function (field, fromDate, toDate, bool) {
           field = field.substring(0, 1) == "=" ? field.substring(1, field.length) : field;
           app.field(field).selectMatch(">=" + fromDate + "<=" + toDate, bool).then(function(reply){
@@ -351,6 +419,7 @@ function($, _, qlik, $q, $http, props, initProps, stateUtil, fieldApi, extension
         return isNaN(item.qNum) ? JSON.stringify({ qText: item.qText }) : JSON.stringify(item.qNum);
       };
 
+      
       $scope.showField = function (field) {
         return field.visible && !_.isEmpty(field.data);
       };
@@ -426,9 +495,13 @@ function($, _, qlik, $q, $http, props, initProps, stateUtil, fieldApi, extension
 
       $scope.setInitSelections = function () {
         if ($scope.willApplyInitSelections) {
-          _.each($scope.fields, function (item) {
+          console.log('Init select daterange');
+              
+          _.each($scope.fields, function (item,idx) {
+            var path = '/kfLists/' + idx + '/qListObjectDef';
             if (item.type != 'VARIABLE' && item.type != 'DATERANGE') {
               if (item.initSelection != '' ) {
+                
                 var selectMatchEnablers = ['=', '<', '>'];
 
                 if (selectMatchEnablers.indexOf(item.initSelection.substring(0, 1)) > -1) {
@@ -443,6 +516,26 @@ function($, _, qlik, $q, $http, props, initProps, stateUtil, fieldApi, extension
 
                   $scope.selectFieldValues(item.field, selectArray, false);
                 }
+                
+                
+                /*
+                $scope.ext.model.enigmaModel.searchListObjectFor(path,item.initSelection).then(function(reply){
+                   console.log('enigmaModel Field',reply);
+                   
+                        $scope.ext.model.enigmaModel.getLayout().then(function(layout){
+                           console.log('enigmaModel Field',layout.kfLists[idx].qListObject.qDimensionInfo.qStateCounts );
+                     
+                      if (layout.kfLists[idx].qListObject.qDimensionInfo.qStateCounts.qSelected == 0) {   
+                       console.log('acceptListObjectSearch Field');
+                         $scope.ext.model.enigmaModel.acceptListObjectSearch(path,false, false);
+                      } else {
+                         
+                            console.log('abortListObjectSearch Field');               
+                         $scope.ext.model.enigmaModel.abortListObjectSearch(path);
+                      }
+                    });
+                });
+                 */
               }
             }
             if (item.type == 'VARIABLE') {
@@ -451,8 +544,30 @@ function($, _, qlik, $q, $http, props, initProps, stateUtil, fieldApi, extension
               }
             }
             if (item.type == 'DATERANGE') {
-              if (item.dateFromInitSelection != ''&& item.dateToInitSelection != '') {
-                $scope.selectDateFromAndTo(item.field, item.dateFromInitSelection, item.dateToInitSelection, true);
+              console.log('Init select daterange', item);
+              if (item.dateFromInitSelection != '' && item.dateToInitSelection != '') {
+                /*
+                var qMatch = '>=' + item.dateFromInitSelection + '<=' + item.dateToInitSelection;
+                console.log('qMatch',qMatch);
+                $scope.ext.model.enigmaModel.searchListObjectFor(path, qMatch).then(function(reply){
+                    $scope.ext.model.enigmaModel.getLayout().then(function(layout){
+                      console.log('enigmaModel',layout.kfLists[idx].qListObject.qDimensionInfo.qStateCounts.qSelected );
+                      console.log('enigmaModel',layout.kfLists[idx].qListObject.qDimensionInfo.qStateCounts.qSelected == 0 &&
+                          layout.kfLists[idx].qListObject.qDimensionInfo.qStateCounts.qSelectedExcluded == 0 );
+                      console.log('enigmaModel',layout.kfLists[idx].qListObject.qDimensionInfo.qStateCounts );
+                      
+                      if ((layout.kfLists[idx].qListObject.qDimensionInfo.qStateCounts.qSelected == 0 &&           
+                          layout.kfLists[idx].qListObject.qDimensionInfo.qStateCounts.qSelectedExcluded == 0) || layout.kfLists[idx].qListObject.qDimensionInfo.qStateCounts.qAlternative != 0) {
+                         console.log('acceptListObjectSearch');
+                         $scope.ext.model.enigmaModel.acceptListObjectSearch(path,false, false);
+                      } else {
+                        console.log('abortListObjectSearch');
+                         $scope.ext.model.enigmaModel.abortListObjectSearch(path);
+                      }
+                    });
+                });
+                */
+                $scope.selectDateFromAndTo(item.field, item.dateFromInitSelection, item.dateToInitSelection, false);
               }
             }
           });
@@ -480,15 +595,17 @@ function($, _, qlik, $q, $http, props, initProps, stateUtil, fieldApi, extension
           $scope.selections.swipe_idx_max = idx;
           $scope.selections.field = field;
 
-          var value = target.attr('datavalue');
+          var value = parseInt(target.attr('datavalue'));
           $scope.selections.selectionsMode = !target.hasClass('S');
 
-          if (typeof value != typeof undefined && value != false) {
+          if (typeof value != typeof undefined) {
             if ($scope.selections.selectionsMode) {
+              console.log('SwipeStart SelectionsMode', value);
               $scope.selections.values_to_select.push(value);
               target.removeClass('A X O');
               target.addClass('S');
             } else {
+              console.log('SwipeStart !SelectionsMode', value);
               $scope.selections.values_to_select.push(value);
               target.removeClass('S');
               target.addClass('X');
@@ -514,9 +631,9 @@ function($, _, qlik, $q, $http, props, initProps, stateUtil, fieldApi, extension
                 var elem = this;
                 if ($scope.selections.selectionsMode) {
                   if (!$(elem).hasClass('S')) {
-                    var value = $(elem).attr('datavalue');
+                    var value = parseInt($(elem).attr('datavalue'));
                     if ($scope.selections.values_to_select.indexOf(value) == -1) {
-                      if (typeof value != typeof undefined && value != false) {
+                      if (typeof value != typeof undefined) {
                         $scope.selections.values_to_select.push(value);
                         $(elem).removeClass('A X O');
                         $(elem).addClass('S');
@@ -525,9 +642,9 @@ function($, _, qlik, $q, $http, props, initProps, stateUtil, fieldApi, extension
                   }
                 } else {
                   if ($(elem).hasClass('S')) {
-                    var value = $(elem).attr('datavalue');
+                    var value = parseInt($(elem).attr('datavalue'));
                     if ($scope.selections.values_to_select.indexOf(value) == -1) {
-                      if (typeof value != typeof undefined && value != false) {
+                      if (typeof value != typeof undefined) {
                         $scope.selections.values_to_select.push(value);
                         $(elem).removeClass('S');
                         $(elem).addClass('X');
@@ -550,7 +667,7 @@ function($, _, qlik, $q, $http, props, initProps, stateUtil, fieldApi, extension
         $scope.selections.swipe_idx_max = -1;
 
         if ($scope.selections.values_to_select != []) {
-          $scope.selectFieldValues($scope.selections.field, $scope.selections.values_to_select, true);
+          $scope.selectElemNos($scope.selections.field, $scope.selections.values_to_select, true);
           $scope.selections.values_to_select = [];
         }
         $scope.selections.field = '';

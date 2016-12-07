@@ -1,47 +1,53 @@
-# Climber Custom Report
-### Self service without edit-mode for Qlik Sense!  
-
-![Alt text](/screenshots/CustomReportSmaller.png?raw=true "Custom Report")
+# Climber Selection Bar
+> Horizontal selection bar with initial selection capabilities. Selections through both click and swipes.
 
 ## Purpose and Description
-In QlikView we saw a lot of users requesting a customizable straight table. Now that is possible in Qlik Sense too! The Custom Report extension allows you to create custom tables based on data in master tables. (For more info on customizable tables in QlikView, check out [this link](https://community.qlik.com/blogs/qlikviewdesignblog/2014/01/31/customizable-straight-table).)
-
-First thing to do is create a table and make it a master item. The table is now accessible in Custom Report and you can select to show any or all measures and dimensions. Number format follows from the master item so no need to redo formatting! For full feature list see screenshots below.
+The selection bar that also serves as a "trigger" for initial selections. For feature list see screenshots below.
 
 Works only with Qlik Sense 3.0 and up!!
 
-
 ## Screenshots
-1. Create Master Item Table
-![Alt text](/screenshots/CreateMasterTable.PNG?raw=true "Create Table")
-![Alt text](/screenshots/CreateMasterTable2.PNG?raw=true "Add to master items")
-2. Select master item in the drop-down and choose what to show in the dimensions and measures. The custom table will be updated accordingly. Only dimensions and measures that are used will be calculated by Qlik Sense.https://community.qlik.com/blogs/qlikviewdesignblog/2014/01/31/customizable-straight-table
-![Alt text](/screenshots/CustomReport.PNG?raw=true "Custom Report")
-3. Sorting of columns by drag and drop. 
-![Alt text](/screenshots/DragAndDropToSort.png?raw=true "Drag and drop to sort")
-4. The table used is a standard Qlik Sense table so all standard features such as export and sorting are available. 
-![Alt text](/screenshots/StandardTableExport.PNG?raw=true "Standard table export and sort")
-5. Using a minimized version of the object you can put a custom report on any sheet along with the rest of the visualizations. Click arrows to expand to full screen!
-![Alt text](/screenshots/Minimized.png?raw=true "Minimized")
-6. Right-click menu allows you to make changes even with fields/sortbar hidden
-![Alt text](/screenshots/RightClickMenu.PNG?raw=true "Right-Click Menu")
-
-
+1. Field - Standard horizontal selection from any field in the application. Intended for use with Year/Month field but will of course work with any field.  
+![Alt text](/screenshots/screenshot_field.PNG?raw=true "Horizontal field selection")
+2. Variable - For variable selection of single ("always one selected") variable. Typical use is for currency selection.  
+![Alt text](/screenshots/screenshot_variable.PNG?raw=true "Horizontal variable selection")
+3. Flags - Easy country selection where you don't have room for a map but want something that looks nice.  
+![Alt text](/screenshots/screenshot_flag.PNG?raw=true "Screenshot flags")
+4. Initial selection - Any field/variable can be set for an initial selection using an expression or comma separated list.  
+![Alt text](/screenshots/screenshot_initial_selection.PNG?raw=true "Screenshot initial selection")
+5. Date range picker (Experimental!) - Drop down calendar for selection of dates
+![Alt text](/screenshots/screenshot_date_range_picker.PNG?raw=true "Date Range Picker")
 ## Installation
 
 1. Download the latest version of Qlik Sense (3.0 or higher)
 2. Qlik Sense Desktop
-	* To install, copy all files in the .zip file to folder "C:\Users\[%Username%]\Documents\Qlik\Sense\Extensions\cl-customreport\"
+	* To install, copy all files in the .zip file to folder "C:\Users\[%Username%]\Documents\Qlik\Sense\Extensions\cl-horizontalselectionbar\"
 3. Qlik Sense Server
 	* See instructions [how to import an extension on Qlik Sense Server](http://help.qlik.com/sense/en-us/developer/#../Subsystems/Workbench/Content/BuildingExtensions/HowTos/deploy-extensions.htm)
 
 ## Configuration
 
-* You can use tags in the master items to show only relevant master item tables. Choose your tag in the settings. (In the picture we used the tag "Custom report" but you can of course choose any tag you want.) 
-![Alt text](/screenshots/UseTags.PNG?raw=true "Use tags to filter master items")
-* If you don't like the colored dimensions and measures it is possible to make them colorless. There is also a default sorting option for the dimensions and measures.
-![Alt text](/screenshots/ColorOrNoColor.PNG?raw=true "Use tags to filter master items")
+* Select the typ of list you need (Field,Variable,Flag or Date Range Picker) 
+* Enter a reference to:
+	* Field - Any field or an expression that works as a dimension
+	* Variable - Has to be an existing variable created either in the script or the gui. Selectable variables are entered in a comma separated list.
+	* Flag - Select a field that has a country name corresponding with the flag names. (Has to be a perfect match with the flag name so check the list of flags if you are not sure.)
+	* Date Range Picker - A field holding a date field with a "complete" set of dates. (i.e. no gaps in the timeline) For this to work you need to set a correct variable. Typically this is a variable "vToday" which is set to "=Today()" but the idea is that for instance "=Today()-1" can be used to offset the starting date for the calendar by one day.
+* Add a field label 
+* Add an initial selection if you want. This will also work with expressions such as "=Year(Today())-1".
+* You can set initial selections to be updated once per session or every time you move to a sheet.
 
+## Alignment alternatives
+1. Left - All lists aligned to the left  
+![Alt text](/screenshots/screenshot_align_left.PNG?raw=true "Align Left")
+2. Right - All lists aligned to the right (Sometimes works well with two selection bars combined on the top row. One right-aligned and one left-aligned)   
+![Alt text](/screenshots/screenshot_align_right.PNG?raw=true "Align Right")
+3. Center - All lists as closed to the center as possible. (Leaves sides empty if space is available.) 
+![Alt text](/screenshots/screenshot_align_center.PNG?raw=true "Align Center")
+4. Center Spread - All lists centered but with outermost lists pushed towards the edges. (Works well when you want to use the full screen width for one selection bar object with multiple lists.)  
+![Alt text](/screenshots/screenshot_align_centerspread.PNG?raw=true "Align Center Spread")
+5. Stack - All lists on top of eachother. (Works when using more than one grid height of the selection bar. Also good for smaller screens.)
+![Alt text](/screenshots/screenshot_align_stacked.PNG?raw=true "Align Stacked")
 
 ## Contributing
 Contributing to this project is welcome. The process to do so is outlined below:
@@ -52,10 +58,8 @@ Contributing to this project is welcome. The process to do so is outlined below:
 
 I cannot guarantee that I will merge all PRs.
 
-## Know Issues
-Due to a bug in Qlik Sense (versions prior to 3.1. SR2) using exports with a virtual proxy requires a workaround. Export the table as ususal. In the URL for the exported object just add the virtual proxy prefix after the server name. (The object is actually exported correctly but we can not get the correct path from Qlik Sense.)  
-https://qlik.sense.server.com/tempcontent/c4ef2a92-2....  
-https://qlik.sense.server.com/VIRTUAL_PROXY_PREFIX/tempcontent/c4ef2a92-2....  
+## Known issues
+Initial selections will not work on calculated dimensions/autogenerated date fields.
 
 ## Author
 

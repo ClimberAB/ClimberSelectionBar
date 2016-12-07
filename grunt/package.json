@@ -1,7 +1,7 @@
 {
-  "name": "Grunt-Deployment-CustomReport",
+  "name": "Grunt-Deployment-HorizontalSelectionBar",
   "version": "0.0.1",
-  "description": "Grunt tasks (dev + release) for the Qlik Sense extension Custom Report",
+  "description": "Grunt tasks (dev + release) for the Qlik Sense extension HorizontalSelectionBar",
   "main": "gruntfile.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -13,7 +13,7 @@
     "QlikSense",
     "Extension"
   ],
-  "author": "Karl Fredberg Sjöstrand",
+  "author": "Karl Fredberg",
   "license": "MIT",
   "dependencies": {
     "grunt": "~0.4.5",

@@ -2,20 +2,24 @@
 define( [], function () {
     'use strict';
     return {
+        props: {
+            allowCollapse : true,
+            collapseMinWidth: 200,
+            collapseMinHeight: 200,
+            displayText: "Custom Report",
+            tagColor: true,
+            sortOrder: "SortByA",
+        }
         /*
-        qChildListDef: {
-                    qData: {
-                        info: "/qInfo"
-                    }
-                },
-*/
-    	showTitles:false,
-    	props: { 
-    		showLabels: false,
-    		floatMode: 'LEFT',
-    		initSelectionMode: 'ONCE',
-    	}
-			
+        qHyperCubeDef: {
+            qDimensions: [],
+            qMeasures: [],
+            qInitialDataFetch: [
+                {
+                    qWidth: 2,
+                    qHeight: 50
+                }
+            ]
+        }*/
     };
-    	
 } );

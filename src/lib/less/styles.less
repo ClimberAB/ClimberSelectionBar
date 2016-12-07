@@ -1,158 +1,173 @@
-// Main Styles (included in _root.less)
-.container {
-  font-family: "QlikView Sans",sans-serif;
-  margin:4px 4px 0px 4px;
-}
-
-#container.no-interactions {
+#cl-customreport-container.no-interactions {
   pointer-events: none;
 }
 
-div.container   {
-  margin-left: 0px;
-  margin-right: 20px;
+ul.sortablelist{
+  margin: 5px;
+  padding: 5px;
+  min-height: 40px;
+  list-style: none;
+  border: 1px solid @borderGrey;
+  border-radius: 3px;
+  border-color: @borderGrey;
+  
 }
 
-div.container.RIGHT   {
-  margin-right: 0px;
-  margin-left: 20px;
+ul.dimension-list {
+  
+  border: 1px solid @borderGrey;
+  border-radius: 3px;
+  min-height: 38px;
+  overflow: auto;
+
 }
 
-div.container.LEFT:last-child   {
-  margin-right: 0px;
+.container_left {
+  float: left; 
+  position: relative; 
+  overflow: auto;
+
+}
+.container_right {
+  float: left; 
+  position: relative; 
+}
+.container_crt {
+  height: 500px;
+}
+.dimension-list li {
+  box-sizing: content-box;
+  -webkit-box-sizing:content-box;
+  -moz-box-sizing:content-box;
+  
 }
 
-div.container.RIGHT:last-child   {
-  margin-right: 0px;
-  margin-left: 20px;
+.dimension-list li:last-child {
+  border-bottom: 0px solid @borderGrey;
 }
 
-div.container.STACK:last-child   {
-  margin-right: 0px;
+ul.measure-list {
+  border: 1px solid @borderGrey;
+  border-radius: 3px;
+  min-height: 38px;
+  overflow: auto;
+}
+.measure-list li {
+  box-sizing: content-box;
+  -webkit-box-sizing:content-box;
+  -moz-box-sizing:content-box;
 }
 
-.LEFT {
-  float:left;
-  display:inline;
-}
-.RIGHT {
-  float:right;
-  display:inline;
-}
-.STACK {
-  clear: both;
-  display:block;
+.measure-list li:last-child {
+  border-bottom: 0px solid @borderGrey;
 }
 
-.container-label {
-  color:#595959;
-  margin-bottom:0px;
-  display:inline;
+
+select {
+  padding-left: 10px;
+  font-weight: normal;
+  height: 38px;
+}
+
+ul.report-list {
+  border:2px;
+  border-color: @borderGrey;
+}
+
+.ghost {
+  opacity: .5;
+}
+
+#customreporttable {
+  height: 100%; 
+  overflow: auto; 
+ // padding-top: 18px;
+}
+.sortablelist li {
+  cursor: pointer;
+  display: inline-block;
+  border-radius: .25em;
+  padding: .3em .6em .2em;
+  margin: 2px;
+  
+}
+
+.sortablelist div {
+  max-width: 120px;
+  font-size: 13px;
+  font-family: 'QlikView Sans', sans-serif;
+  font-weight: normal;
+  padding:2px;
+  line-height: 1;
+  text-align: left;
+  vertical-align: baseline;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display:inherit;
+   
+}
+
+.dimension-list div,
+.measure-list div
+ {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+   
+}
+
+.sortablelist span {
+  font-size: 11px;
+  vertical-align: text-top;
+  display: inline-flex;
+  }
+
+
+.containerlabel {
   font-weight: bold;
+  font-family: 'QlikView Sans', sans-serif;
+  font-size: 16px;
+  margin: 5px 0px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
-button.lui-button  {
-  min-width: 0px;
-  font-weight: normal;
-  font-size: 13px;
-  padding:0px 8px 0px 8px;
+.sortablelist span {
+  cursor: context-menu;
+  padding-left: 2px; 
 }
 
-.FIELD span {
-  pointer-events: none;  
+.label-dimension {
+  background-color: #337ab7;
+  color: #fff;
 }
 
-
-.FLAG img {
-  pointer-events: none;
-  height: 18px;
-  min-width: 24px;
-  padding:4px 0px 2px 0px;
+.label-measure {
+  background-color: #f0ad4e;
+  color: #fff;
 }
 
-.lui-button.A {
-  background:#ddd;
-  color: @defaultTextColor;
+.plain .label-measure
+ {
+  background-color: white;
+  border: 1px solid @borderGrey;
+  border-radius: 3px;
+  color: @fontColor;
 }
-.lui-button.X {
-  background:#A9A9A9;
-  color: #ffffff;
-}
-
-.lui-button.S {
-  background:@selectedColor;
-  color: #ffffff;
-}
-
-.lui-button.XS {
-  background: #A9A9A9;
-  color: #ffffff;
+.plain .label-dimension
+ {
+  background-color: white;
+  border: 1px solid @borderGrey;
+  border-radius: 3px;
+  color: @fontColor;
 }
 
-label.lui-radiobutton {
-  float: left;
-  display:inline;
+i {
+  padding-left: 10px;
 }
 
-div.lui-radiobutton__radio-wrap {
-  margin: 5px 7px 5px 0px;
-}
-
-.lui-radiobutton .lui-radiobutton__input:checked + .lui-radiobutton__radio-wrap .lui-radiobutton__radio {
-  background: @selectedColor;
-  border-color: transparent;
-}
-
-span.lui-radiobutton__radio-text {
-  padding-left: 1px;
-  font-weight: normal;
-  font-size: 13px;
-}
-
-
-.SMALL button.lui-button  {
-  height: 24px;
-  font-size: 10px;
-  padding:0px 6px 1px 6px;
-}
-
-.SMALL .FLAG img {
-  height: 14px;
-  min-width: 24px;
-}
-
-.SMALL span.lui-radiobutton__radio {
-  height: 18px;
-  width: 18px;
-}
-
-.SMALL .lui-radiobutton__radio::after {
-    width: 8px;
-    height: 8px;
-    top: 4px;
-    left: 4px;
-}
-
-.SMALL span.lui-radiobutton__radio-text {
-  font-size: 10px;
-}
-
-.SMALL div.lui-radiobutton__radio-wrap {
-  margin: 2px 4px 2px 0px;
-}
-
-div.container.SMALL    {
-  margin-right: 12px;
-}
-div.container.RIGHT.SMALL    {
-  margin-left: 12px;
-}
-
-div.container.RIGHT.SMALL:last-child   {
-  margin-left: 12px;
-}
-
-
-span.daterange-input  {
-  font-weight: normal; 
+i.disabled {
+  color: @borderGrey;
 }

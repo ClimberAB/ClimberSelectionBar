@@ -1,6 +1,7 @@
-**Climber Selection Bar Qlik Sense Extension** is licensed under the "MIT" license:
+**Custom Report Qlik Sense Extension** is licensed under the "MIT" license:
 
 * [License](#license)
+* [External Libraries](#external libraries)
 
 ---
 
@@ -9,7 +10,7 @@
 > 
 > The MIT License (MIT)
 > 
-> Copyright (c) 2016 Climber
+> Copyright (c) 2016 Karl Fredberg Sjöstrand
 > 
 > Permission is hereby granted, free of charge, to any person obtaining a copy
 > of this software and associated documentation files (the "Software"), to deal
@@ -29,6 +30,16 @@
 > OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 > SOFTWARE.
 > 
+
+## External Libraries
+
+These external libraries are used within this solution. Many thanks to the authors!
+
+**Sortable**
+* Name: Sortable
+* License: MIT License Copyright 2013-2016 Lebedev Konstantin ibnRubaXa@gmail.com http://rubaxa.github.io/Sortable/
+* Url: https://github.com/RubaXa/Sortable
+* Author: Lebedev Konstantin ibnRubaXa@gmail.com http://rubaxa.github.io/Sortable/
 
 ---
 

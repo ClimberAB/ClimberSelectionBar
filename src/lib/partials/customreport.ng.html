@@ -1,0 +1,111 @@
+<!-- controller.dynic-->
+<div qv-extension id="cl-customreport-container" style="height: 100%; position: relative; overflow: auto;" ng-class="getClass()">
+	<div ng-show="collapsed"><div class="containerlabel"><i style="padding-right: 10px; padding-left: 10px" class="icon-table"></i>{{data.displayText}} </div>
+                </div>
+    <div ng-hide="collapsed">
+        <div ng-show="fieldsAndSortbarVisible" class="container_left" ng-style="getContainerWidth('left')">
+    		<div class="bootstrap" style="margin-right: 12px;"">
+    			<!--lui-button  ng-click="exportData('exportToExcel')" title='Export to Excel' ><i class="icon-toolbar-sharelist"> Excel</i></lui-button-->
+    			
+                <div class="form-group">
+    			    <div class="containerlabel" q-translation="library.Visualizations"></div>
+                    
+                	<form name="myForm">
+    					<!--label class="containerlabel" for="repeatSelect">Select master object: </label-->
+    					<lui-select name="mySelect" id="mySelect"
+    						ng-change="changeTable()"
+    						ng-options="option.qMeta.title for option in data.masterObjectList track by option.qInfo.qId"
+    					ng-model="data.activeTable"></lui-select>
+    					
+    				</form>
+    			</div>
+    			
+    				<div class="containerlabel" q-translation="Common.Dimensions"></div>
+    				<ul id="dimensionSortable" class="lui-list dimension-list" ng-style="getListMaxHeight('dimension')">
+    					<li qv-swipe="swipe($event)" ng-class="dimension.handle" class="lui-list__item" ng-click="selectItem(dimension)" title="{{dimension.title +'\n' + dimension.description}}"  ng-repeat="dimension in report.dimensions" data-id={{dimension.dataId}}>
+    						<div class="lui-list__text">{{dimension.title}}</div><div class="icon-tick lui-list-icon" ng-if="dimension.selected"></div>
+    					</li>
+    				</ul>
+    			<div class="containerlabel" q-translation="Common.Measures"></div>
+    			<ul id="measureSortable" class="lui-list measure-list" ng-style="getListMaxHeight('measure')">
+    				<li class="lui-list__item" ng-click="selectItem(measure)" title="{{measure.title +'\n' + measure.description}}"  ng-repeat="measure in report.measures">
+    					<div class="lui-list__text">{{measure.title}}</div><div class="lui-icon--tick lui-icon" ng-if="measure.selected"></div>
+    				</li>
+    			</ul>
+    		</div>
+    	</div>
+    	<div class="container_right" ng-style="getContainerWidth('right')">
+    		<div ng-show="fieldsAndSortbarVisible" class="bootstrap">
+    			<div class="containerlabel">{{data.displayText}} <i title="Clear All" class="icon-toolbar-clearselections" ng-click="clearAll()" ng-class="report.state.length == 0 ? 'disabled': ''"></i><i title="Hide fields/sortbar" class="icon-maximize" ng-click="hideFieldAndSortbar()"></i><i title="Export" class="icon-toolbar-sharelist" ng-click="exportData('exportToExcel')"></i></div>
+    			<ul id="reportSortable" ng-class="{plain:!data.tagColor}" class="sortablelist" >
+    				<li ng-class="item.type=='dimension' ? 'label-dimension' : 'label-measure'" title="{{item.title +'\n' + item.description}}" ng-repeat="item in report.state">
+    					<div>{{item.title}}</div><span class="icon-vtabs-delete" ng-click="removeItem(item)"></span>
+    					
+    				</li>
+    			</ul>
+    		</div >
+    		<div ng-style="getTableHeight()">
+    		    <!-- Begin rain load animation -->
+            <div class="rain rain-loader qv-block-ui ng-scope" ng-style="getTableHeight()" style="top:inherit;" ng-class="{'qv-fade-out': fadeOut, 'qv-transparent-background': transparentBackground}" tid="3e1f54">
+                <div class="qv-animate progress-loader qv-loader-container qv-loader-huge qv-fade-in" ng-class="ngClasses">
+                    <div class="one">
+                        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" x="0px" y="0px" viewBox="0 0 210 210" xml:space="preserve">
+                            <g>
+                                <path class="path" d="M105,205c-26.7,0-51.8-10.4-70.7-29.3C15.4,156.8,5,131.7,5,105s10.4-51.8,29.3-70.7C53.2,15.4,78.3,5,105,5 c55.1,0,100,44.9,100,100S160.1,205,105,205z M105,23.7c-44.8,0-81.3,36.5-81.3,81.3c0,44.8,36.5,81.3,81.3,81.3 c44.8,0,81.3-36.5,81.3-81.3C186.3,60.2,149.8,23.7,105,23.7z"></path>
+                            </g>
+                        </svg>
+                    </div>
+                    <div class="two">
+                        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" x="0px" y="0px" viewBox="0 0 210 210" xml:space="preserve">
+                            <g>
+                                <path class="path" d="M105,205C49.9,205,5,160.1,5,105C5,49.9,49.9,5,105,5c55.1,0,100,44.9,100,100C205,160.1,160.1,205,105,205z M105,19.4c-47.2,0-85.6,38.4-85.6,85.6c0,47.2,38.4,85.6,85.6,85.6c47.2,0,85.6-38.4,85.6-85.6C190.6,57.8,152.2,19.4,105,19.4z"></path>
+                            </g>
+                        </svg>
+                    </div>
+                    <div class="three">
+                        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" x="0px" y="0px" viewBox="0 0 210 210" xml:space="preserve">
+                            <g>
+                                <path class="path" d="M105,205c-26.7,0-51.8-10.4-70.7-29.3C15.4,156.8,5,131.7,5,105s10.4-51.8,29.3-70.7C53.2,15.4,78.3,5,105,5 c55.1,0,100,44.9,100,100S160.1,205,105,205z"></path>
+                            </g>
+                        </svg>
+                    </div>
+                    <div class="four">
+                        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" x="0px" y="0px" viewBox="0 0 210 210" xml:space="preserve">
+                            <g>
+                                <path class="path" d="M105,205C49.9,205,5,160.1,5,105C5,49.9,49.9,5,105,5c55.1,0,100,44.9,100,100C205,160.1,160.1,205,105,205z M105,19.4c-47.2,0-85.6,38.4-85.6,85.6c0,47.2,38.4,85.6,85.6,85.6c47.2,0,85.6-38.4,85.6-85.6C190.6,57.8,152.2,19.4,105,19.4z"></path>
+                            </g>
+                        </svg>
+                    </div>
+                    <div class="five">
+                        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" x="0px" y="0px" viewBox="0 0 210 210" xml:space="preserve">
+                            <g>
+                                <path class="path" d="M105 205C49.9 205 5 160.1 5 105C5 49.9 49.9 5 105 5c55.1 0 100 44.9 100 100C205 160.1 160.1 205 105 205z M105 10.5c-52.1 0-94.5 42.4-94.5 94.5c0 52.1 42.4 94.5 94.5 94.5c52.1 0 94.5-42.4 94.5-94.5C199.5 52.9 157.1 10.5 105 10.5z"></path>
+                            </g>
+                        </svg>
+                    </div>
+                    <div class="six">
+                        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" x="0px" y="0px" viewBox="0 0 210 210" xml:space="preserve">
+                            <g>
+                                <path class="path" d="M105,205c-26.7,0-51.8-10.4-70.7-29.3C15.4,156.8,5,131.7,5,105s10.4-51.8,29.3-70.7C53.2,15.4,78.3,5,105,5 c55.1,0,100,44.9,100,100S160.1,205,105,205z"></path>
+                            </g>
+                        </svg>
+                    </div>
+                    <div class="seven">
+                        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" x="0px" y="0px" viewBox="0 0 210 210" xml:space="preserve">
+                            <g>
+                                <path class="path" d="M105,205C49.9,205,5,160.1,5,105C5,49.9,49.9,5,105,5c55.1,0,100,44.9,100,100C205,160.1,160.1,205,105,205z M105,19.4c-47.2,0-85.6,38.4-85.6,85.6c0,47.2,38.4,85.6,85.6,85.6c47.2,0,85.6-38.4,85.6-85.6C190.6,57.8,152.2,19.4,105,19.4z"></path>
+                            </g>
+                        </svg>
+                    </div>
+                </div>
+                <!-- ngIf: messageObj --><div class="qv-loader-text ng-scope qv-loader-huge qv-fade-in" ng-if="rainText" ng-class="ngClasses">
+                    <div ng-show="rainText.text" q-translation="Export.Exporting" class="ng-hide"></div>
+                </div><!-- end ngIf: messageObj -->
+            </div>
+            <!-- End rain load animation -->
+    			<div id="customreporttable" class="qvobject" ></div>
+    			
+    		</div>
+    	</div>
+    <div>
+</div>

@@ -106,7 +106,16 @@ function($, _, qlik, $q, $http, props, initProps, stateUtil, fieldApi, extension
       console.log('layout', layout);
       console.log('fieldApi',fieldApi);
 
-      
+      // app.visualization.create('listbox', null, {
+      //     title: 'Month',
+      //     qListObjectDef: {
+      //       qDef: {
+      //           qFieldDefs: ['Datum']
+      //       }
+      //     }
+      // }).then(model => {
+      //   model.show('my-listbox')
+      // })
 
       app.getObjectProperties(layout.qInfo.qId).then(function(model){
           console.log('model',model);
@@ -395,16 +404,21 @@ function($, _, qlik, $q, $http, props, initProps, stateUtil, fieldApi, extension
       };
 
       $scope.selectFieldValues = function (field, items, bool) {
+        console.log('items',items);
         field = field.substring(0, 1) == "=" ? field.substring(1, field.length) : field;
         console.log('field',field);
         var selectArray = [];
         _.each(items, function (item) {
           selectArray.push(JSON.parse(item));
         });
-           app.field(field).selectValues(selectArray, bool).then(function(reply){
-            }).catch(function(err){
-                location.reload(true);       
-            })
+
+        console.log('selectArray',selectArray);
+        
+        app.field(field).selectValues(selectArray, bool).then(function(reply){
+            
+        }).catch(function(err){
+          location.reload(true);       
+        })
       };
 
       //*******************************
@@ -508,6 +522,7 @@ function($, _, qlik, $q, $http, props, initProps, stateUtil, fieldApi, extension
                   app.field(item.field).clear();
                   app.field(item.field).selectMatch(item.initSelection);
                 } else {
+                  console.log('item.initSelectionSeparator',item.initSelectionSeparator);
                   var items = item.initSelection.split(item.initSelectionSeparator);
                   var selectArray = [];
                   _.each(items, function (stringItem) {

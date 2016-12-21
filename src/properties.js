@@ -87,7 +87,7 @@ define([
       */
       field: {
         component: "expression",
-        expression: "always",
+        expression: "optional",
         expressionType: "dimension",
         ref: "qListObjectDef.qDef.qFieldDefs.0",
         defaultValue: "",
@@ -101,6 +101,54 @@ define([
             data.dateMaxValue.qValueExpression.qExpr = "=Max(" + data.qListObjectDef.qDef.qFieldDefs[0] + ")";
           }
           //return void 0;
+        }
+      },
+      fieldWarning: {
+        component: "text",
+        translation: "Field is a calculated dimension, initial selections not supported",
+        show: function (data) {
+          return (data.listType == "FIELD" || data.listType == "FLAG" || (data.listType == "DATERANGE" && data.dateRangeType == "FIELD")) && data.qListObjectDef.qDef.qFieldDefs[0].substring(0,1) == "=";
+        }
+      },
+    
+      initSelection: {
+        type: "string",
+        ref: "initSelection",
+        expression: "optional",
+        label: "Initial selection",
+        show: function (data) {
+          return data.listType != "DATERANGE";
+        },
+        readOnly: function(data) {
+          return data.qListObjectDef.qDef.qFieldDefs[0].substring(0,1) == "="
+        }
+      },
+      initSelectionSeparatorComma : {
+        type: "boolean",
+        component: "switch",
+        label: "Initial selection separator",
+        ref: "initSelectionSeparatorComma",
+        defaultValue: true,
+        options: [{
+          value: true,
+          label: "Comma separator",
+        }, {
+          value: false,
+          label: "Custom separator",
+        }],
+        show: function (data) {
+          return data.listType != "DATERANGE";
+        },
+      },
+      initSelectionSeparator: {
+        type: "string",
+        ref: "initSelectionSeparator",
+        label: "Custom separator",
+        show: function (data) {
+          return data.listType != "DATERANGE" && !data.initSelectionSeparatorComma;
+        },
+        readOnly: function(data) {
+          return data.qListObjectDef.qDef.qFieldDefs[0].substring(0,1) == "="
         }
       },
       customSortOrder: {
@@ -265,6 +313,9 @@ define([
           data.dateFromInitSelectionValue = data.dateFromInitSelectionValue || {};
           data.dateFromInitSelectionValue.qStringExpression = '=' + data.dateFromInitSelection;
         },
+        readOnly: function(data) {
+          return data.qListObjectDef.qDef.qFieldDefs[0].substring(0,1) == "="
+        }
       },
       dateToVariable: {
         type: "string",
@@ -291,6 +342,9 @@ define([
           data.dateToInitSelectionValue = data.dateToInitSelectionValue || {};
           data.dateToInitSelectionValue.qStringExpression = '=' + data.dateToInitSelection;
         },
+        readOnly: function(data) {
+          return data.qListObjectDef.qDef.qFieldDefs[0].substring(0,1) == "="
+        }
       },
       dateFormat: {
         type: "string",
@@ -388,43 +442,6 @@ define([
           return data.listType == "VARIABLE";
         },
       },
-      /*
-      alternativeDim: {
-        type: "boolean",
-        ref: "alternativeDim",
-        component: "switch",
-        label: "Switch alternative dimensions",
-        defaultValue: false,
-        options: [{
-          value: true,
-          label: "Switch",
-        }, {
-          value: false,
-          label: "Off",
-        }],
-        show: function (data) {
-          return data.listType == "VARIABLE";
-        },
-      },
-      alternativeDimensions: {
-        type: "string",
-        ref: "alternativeDimensions",
-        label: "Alternative dimensions (comma separated)",
-        defaultValue: "",
-        show: function (data) {
-          return data.alternativeDim && data.listType == "VARIABLE";
-        },
-      },
-      */
-      initSelection: {
-        type: "string",
-        ref: "initSelection",
-        expression: "optional",
-        label: "Initial selection",
-        show: function (data) {
-          return data.listType != "DATERANGE";
-        },
-      },
       listVisable: {
         type: "boolean",
         ref: "listVisible",
@@ -494,7 +511,6 @@ define([
   // ****************************************************************************************
 
   var initSelectionSetting = {
-
     type: "string",
     component: "dropdown",
     label: "Initial selection mode",

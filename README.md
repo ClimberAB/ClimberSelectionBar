@@ -32,7 +32,7 @@ Works only with Qlik Sense 3.0 and up!!
 	* Field - Any field or an expression that works as a dimension
 	* Variable - Has to be an existing variable created either in the script or the gui. Selectable variables are entered in a comma separated list.
 	* Flag - Select a field that has a country name corresponding with the flag names. (Has to be a perfect match with the flag name so check the list of flags if you are not sure.)
-	* Date Range Picker - A field holding a date field with a "complete" set of dates. (i.e. no gaps in the timeline) For this to work you need to set a correct variable. Typically this is a variable "vToday" which is set to "=Today()" but the idea is that for instance "=Today()-1" can be used to offset the starting date for the calendar by one day.
+	* Date Range Picker - A field holding a date field with a "complete" set of dates. (i.e. no gaps in the timeline) It uses the DateFormat variable for the date format, both to parse the dates and when selections are made. If the Today expression is left blank it default to Now().
 * Add a field label 
 * Add an initial selection if you want. This will also work with expressions such as "=Year(Today())-1".
 * You can set initial selections to be updated once per session or every time you move to a sheet.

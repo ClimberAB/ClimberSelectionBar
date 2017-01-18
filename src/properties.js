@@ -48,43 +48,16 @@ define([
           value: "DATERANGE",
           label: "Date range picker",
         }],
-        
         change: function (data) {
           if (data.listType == "DATERANGE") {
-            data.dateMinValue.qValueExpression.qExpr = "=Min(" + data.qListObjectDef.qDef.qFieldDefs[0] + ")";
-            data.dateMaxValue.qValueExpression.qExpr = "=Max(" + data.qListObjectDef.qDef.qFieldDefs[0] + ")";
+            data.date.min.qValueExpression.qExpr = "=Min(" + data.qListObjectDef.qDef.qFieldDefs[0] + ")";
+            data.date.max.qValueExpression.qExpr = "=Max(" + data.qListObjectDef.qDef.qFieldDefs[0] + ")";
+          } else {
+            data.date.min.qValueExpression.qExpr = "";
+            data.date.max.qValueExpression.qExpr = "";          
           }
-          //return void 0;
         }
       },
-      dateRangeType: {
-        type: "string",
-        component: "radiobuttons",
-        label: "Date range picker type",
-        ref: "dateRangeType",
-        options: [{
-          value: "FIELD",
-          label: "Field"
-        }, {
-          value: "VARIABLES",
-          label: "Variables"
-        }],
-        defaultValue: "FIELD",
-        show:false,
-        /*
-        show: function (data) {
-          return data.listType == "DATERANGE";
-        },
-        */
-      },
-      /*
-      showAlternatives: {
-        type: "boolean",
-        ref: "qListObjectDef.qShowAlternatives",
-        show: false,
-        defaultValue: true,
-      },
-      */
       field: {
         component: "expression",
         expression: "optional",
@@ -93,24 +66,25 @@ define([
         defaultValue: "",
         label: "Field",
         show: function (data) {
-          return data.listType == "FIELD" || data.listType == "FLAG" || (data.listType == "DATERANGE" && data.dateRangeType == "FIELD");
-        },        
+          return data.listType == "FIELD" || data.listType == "FLAG" || data.listType == "DATERANGE";
+        },
         change: function (data) {
-          if (data.listType == "DATERANGE") {
-            data.dateMinValue.qValueExpression.qExpr = "=Min(" + data.qListObjectDef.qDef.qFieldDefs[0] + ")";
-            data.dateMaxValue.qValueExpression.qExpr = "=Max(" + data.qListObjectDef.qDef.qFieldDefs[0] + ")";
+          if (data.label == '') {
+            data.label = data.qListObjectDef.qDef.qFieldDefs[0];
           }
-          //return void 0;
+          if (data.listType == "DATERANGE") {
+            data.date.min.qValueExpression.qExpr = "=Min(" + data.qListObjectDef.qDef.qFieldDefs[0] + ")";
+            data.date.max.qValueExpression.qExpr = "=Max(" + data.qListObjectDef.qDef.qFieldDefs[0] + ")";
+          } 
         }
       },
       fieldWarning: {
         component: "text",
         translation: "Field is a calculated dimension, initial selections not supported",
         show: function (data) {
-          return (data.listType == "FIELD" || data.listType == "FLAG" || (data.listType == "DATERANGE" && data.dateRangeType == "FIELD")) && data.qListObjectDef.qDef.qFieldDefs[0].substring(0,1) == "=";
+          return (data.listType == "FIELD" || data.listType == "FLAG" || data.listType == "DATERANGE" ) && data.qListObjectDef.qDef.qFieldDefs[0].substring(0,1) == "=";
         }
       },
-    
       initSelection: {
         type: "string",
         ref: "initSelection",
@@ -288,150 +262,105 @@ define([
         label: "Variable value",
         show: false,
       },
-      dateFromVariable: {
-        type: "string",
-        ref: "dateFromVariable",
-        label: "Date from variable",
-        defaultValue: "",
-        show: function (data) {
-          return data.listType == "DATERANGE" && data.dateRangeType == "VARIABLES";
-        },
-        change: function (data) {
-          data.dateFromVariable != "" ? data.dateFromValue.qStringExpression.qExpr = "=" + data.dateFromVariable : "";
-        },
-      },
       dateFromInitSelection: {
         type: "string",
-        ref: "dateFromInitSelection",
+        ref: "date.initSelectionFrom",
         expression: "optional",
-        label: "Date from initial selection",
+        translation: "Date from initial selection",
         defaultValue: "",
         show: function (data) {
-          return data.listType == "DATERANGE" && data.dateRangeType == "FIELD";
-        },
-        change: function (data) {
-          data.dateFromInitSelectionValue = data.dateFromInitSelectionValue || {};
-          data.dateFromInitSelectionValue.qStringExpression = '=' + data.dateFromInitSelection;
-        },
-        readOnly: function(data) {
-          return data.qListObjectDef.qDef.qFieldDefs[0].substring(0,1) == "="
-        }
-      },
-      dateToVariable: {
-        type: "string",
-        ref: "dateToVariable",
-        label: "Date to variable",
-        defaultValue: "",
-        show: function (data) {
-          return data.listType == "DATERANGE" && data.dateRangeType == "VARIABLES";
-        },
-        change: function (data) {
-          data.dateToVariable != "" ? data.dateToVariable.qStringExpression.qExpr = "=" + data.dateToVariable : "";
+          return data.listType == "DATERANGE";
         },
       },
       dateToInitSelection: {
         type: "string",
-        ref: "dateToInitSelection",
+        ref: "date.initSelectionTo",
         expression: "optional",
-        label: "Date to initial selection",
-        defaultValue: "",        
-        show: function (data) {
-          return data.listType == "DATERANGE" && data.dateRangeType == "FIELD";
-        },
-        change: function (data) {
-          data.dateToInitSelectionValue = data.dateToInitSelectionValue || {};
-          data.dateToInitSelectionValue.qStringExpression = '=' + data.dateToInitSelection;
-        },
-        readOnly: function(data) {
-          return data.qListObjectDef.qDef.qFieldDefs[0].substring(0,1) == "="
-        }
-      },
-      dateFormat: {
-        type: "string",
-        ref: "dateFormat",
-        label: "Field date format",
-        defaultValue: "YYYY-MM-DD",
+        translation: "Date to initial selection",
+        defaultValue: "",
         show: function (data) {
           return data.listType == "DATERANGE";
         },
+      },
+      dateFormat: {
+        type: "string",
+        ref: "date.format.qStringExpression.qExpr",
+        expression: "always",
+        label: "Field date format",
+        defaultValue: "=DateFormat",
+        show: false,
+        readOnly: true,
       },
       displayDateFormat: {
         type: "string",
         component: "dropdown",
-        ref: "displayDateFormat",
+        ref: "date.displayFormat",
         label: "Display date format",
-        defaultValue: "YYYY-MM-DD",
+        defaultValue: "DEFAULT",
         options: [{
-          value: "YYYY-MM-DD",
-          label: "1980-01-01",
+          value: "DEFAULT",
+          label: "Default format",
         }, {
           value: "MMMM D, YYYY",
           label: "January 1, 1980",
         }, {
-          value: "MM D, YYYY",
+          value: "MMM D, YYYY",
           label: "Jan 1, 1980",
-        }],
+        },{
+          value: "YYYY-MM-DD",
+          label: "1980-01-01",
+        },{
+          value: "YYYYMMDD",
+          label: "19800101",
+        },],
         show: function (data) {
           return data.listType == "DATERANGE";
         },
       },
-      dateTodayVariable: {
+      dateToday: {
         type: "string",
-        ref: "dateTodayVariable",
-        label: "Today variable",
+        ref: "date.today",
+        expression: "optional",
+        translation: "Today expression",
         defaultValue: "",
         show: function (data) {
           return data.listType == "DATERANGE";
-        },
-        change: function (data) {
-          data.dateTodayVariable != "" ? data.dateTodayValue.qValueExpression.qExpr = "=" + data.dateTodayVariable : data.dateTodayValue.qValueExpression.qExpr = "";
         },
       },
-      dateTodayValue: {
+      dateRangeMin: {
         type: "string",
-        expression: "always",
-        ref: "dateTodayValue.qValueExpression.qExpr",
-        label: "Date today value",
-        show: false,
-      },  
-      daterangeMinVariable: {
-        type: "string",
-        ref: "daterangeMinVariable",
-        label: "Daterange min variable",
+        ref: "date.rangeMin",
+        expression: "optional",
+        translation: "Daterange min expression",
         defaultValue: "",
         show: function (data) {
           return data.listType == "DATERANGE";
-        },
-        change: function (data) {
-          data.daterangeMinVariable != "" ? data.daterangeMinValue.qValueExpression.qExpr = "=" + data.daterangeMinVariable : data.daterangeMinValue.qValueExpression.qExpr = "";
         },
       },
-      daterangeMinValue: {
+      dateRangeMax: {
         type: "string",
-        expression: "always",
-        ref: "daterangeMinValue.qValueExpression.qExpr",
-        label: "Date min value",
-        show: false,
-      },  
-      daterangeMaxVariable: {
-        type: "string",
-        ref: "daterangeMaxVariable",
-        label: "Date max variable",
+        ref: "date.rangeMax",
+        expression: "optional",
+        translation: "Daterange max expression",
         defaultValue: "",
         show: function (data) {
           return data.listType == "DATERANGE";
         },
-        change: function (data) {
-          data.daterangeMaxVariable != "" ? data.daterangeMaxValue.qValueExpression.qExpr = "=" + data.daterangeMaxVariable : data.daterangeMaxValue.qValueExpression.qExpr = "";
-        },
-      },          
-      daterangeMaxValue: {
+      },
+      dateMin: {
         type: "string",
+        ref: "date.min.qValueExpression.qExpr",
         expression: "always",
-        ref: "daterangeMaxValue.qValueExpression.qExpr",
-        label: "Date max value",
+        defaultValue: "",
         show: false,
-      },   
+      },
+      dateMax: {
+        type: "string",
+        ref: "date.max.qValueExpression.qExpr",
+        expression: "always",
+        defaultValue: "",
+        show: false,
+      },
       variableValues: {
         type: "string",
         ref: "variableValues",
@@ -451,40 +380,6 @@ define([
         },
         defaultValue: true,
       },
-      dateMinValue: {
-        type: "string",
-        expression: "always",
-        //expressionType: "dimension",
-        //ref: "dateMinValue.qValueExpression.qExpr",
-        ref: "dateMinValue.qValueExpression.qExpr",
-        label: "Date min value",
-        show: false,
-      },
-      dateMaxValue: {
-        type: "string",
-        expression: "always",
-        //expressionType: "dimension",
-        //ref: "dateMaxValue.qValueExpression.qExpr",
-        ref: "dateMaxValue.qValueExpression.qExpr",
-        label: "Date max value",
-        show: false,
-      },
-      dateFromValue: {
-        type: "string",
-        expression: "always",
-        expressionType: "dimension",
-        ref: "dateFromValue.qStringExpression.qExpr",
-        label: "Date from value",
-        show: false,
-      },
-      dateToValue: {
-        type: "string",
-        expression: "always",
-        expressionType: "dimension",
-        ref: "dateToValue.qStringExpression.qExpr",
-        label: "Date to value",
-        show: false,
-      },
       InitialDataFetchWidth: {
         type: "number",
         ref: "qListObjectDef.qInitialDataFetch.0.qWidth",
@@ -500,10 +395,6 @@ define([
         defaultValue: 1000,
       },
     },
-  };
-
-  var sorting = {
-    uses: "sorting",
   };
 
   // ****************************************************************************************

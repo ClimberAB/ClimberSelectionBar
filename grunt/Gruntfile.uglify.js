@@ -19,8 +19,8 @@ module.exports = function ( grunt ) {
 		release: {
 			files: [
 				{
-					src: ['./../dist/**/*.js', '!./../dist/**/*.min.js'],
-					dest: './../dist/',
+					src: ['./dist/**/*.js', '!./dist/**/*.min.js'],
+					dest: '.',
 					expand: true
 				}
 			]

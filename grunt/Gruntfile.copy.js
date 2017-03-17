@@ -9,29 +9,29 @@ module.exports = function ( grunt ) {
 		},
 		copy_to_dist_dev: {
 			expand: true,                   // allow dynamic building
-			cwd: '../src/',                 // change base dir
+			cwd: './src/',                 // change base dir
 			//src: ['**', '!docs/**'],      // source files mask
 			src: ['**'],
-			dest: '../dist_dev/',           // destination folder
+			dest: './dist_dev/',           // destination folder
 			flatten: false                  // remove all unnecessary nesting
 		},
 		copy_to_dist_release: {
 			expand: true,                   // allow dynamic building
-			cwd: '../src/',                 // change base dir
+			cwd: './src/',                 // change base dir
 			//src: ['**', '!docs/**'],      // source files mask
 			src: ['**'],
-			dest: '../dist/',               // destination folder
+			dest: './dist/',               // destination folder
 			flatten: false                  // remove all unnecessary nesting
 		},
 		copy_to_desktop_dev: {
 			expand: true,
-			cwd: '../dist_dev/',
+			cwd: './dist_dev/',
 			src: '**',
 			dest: '<%= projectconfig.general.LocalExtensionPath%>/<%= projectconfig.general.ExtensionNamespace%><%= projectconfig.general.ExtensionNameSafe%>/'
 		},
 		copy_to_desktop_release: {
 			expand: true,
-			cwd: '../dist/',
+			cwd: './dist/',
 			src: '**',
 			dest: '<%= projectconfig.general.LocalExtensionPath%>/<%= projectconfig.general.ExtensionNamespace%><%= projectconfig.general.ExtensionNameSafe%>/'
 		}

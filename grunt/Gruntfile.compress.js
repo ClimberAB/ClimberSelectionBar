@@ -7,12 +7,12 @@ module.exports = function ( grunt ) {
 
 		dev: {
 			options: {
-				archive: '../build/<%=projectconfig.general.ExtensionNamespace%><%=projectconfig.general.ExtensionNameSafe.toLowerCase()%>_dev.zip'
+				archive: './build/<%=projectconfig.general.ExtensionNamespace%><%=projectconfig.general.ExtensionNameSafe.toLowerCase()%>_dev.zip'
 			},
 			files: [
 				{
 					expand: true,
-					cwd: '../dist_dev/',
+					cwd: './dist_dev/',
 					src: ['**/*.*'],
 					dest: '/'
 				}
@@ -20,12 +20,12 @@ module.exports = function ( grunt ) {
 		},
 		release: {
 			options: {
-				archive: '../build/<%=projectconfig.general.ExtensionNamespace%><%=projectconfig.general.ExtensionNameSafe.toLowerCase()%>_v<%=projectconfig.general.Version%>.zip'
+				archive: './build/<%=projectconfig.general.ExtensionNamespace%><%=projectconfig.general.ExtensionNameSafe.toLowerCase()%>_v<%=projectconfig.general.Version%>.zip'
 			},
 			files: [
 				{
 					expand: true,
-					cwd: '../dist/',
+					cwd: './dist/',
 					src: ['**/*.*'],
 					dest: '/'
 				}
@@ -33,12 +33,12 @@ module.exports = function ( grunt ) {
 		},
 		release_latest: {
 			options: {
-				archive: '../build/<%=projectconfig.general.ExtensionNamespace%><%=projectconfig.general.ExtensionNameSafe.toLowerCase()%>_latest.zip'
+				archive: './build/<%=projectconfig.general.ExtensionNamespace%><%=projectconfig.general.ExtensionNameSafe.toLowerCase()%>_latest.zip'
 			},
 			files: [
 				{
 					expand: true,
-					cwd: '../dist/',
+					cwd: './dist/',
 					src: ['**/*.*'],
 					dest: '/'
 				}
@@ -51,7 +51,7 @@ module.exports = function ( grunt ) {
 			files: [
 				{
 					expand: true,
-					cwd: '../',
+					cwd: './',
 					src: ['src/**/*', 'grunt/**/*', '!grunt/node_modules/**/*'],
 					dest: '/'
 				}

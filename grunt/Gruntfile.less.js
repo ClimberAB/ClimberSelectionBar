@@ -16,10 +16,10 @@ module.exports = function ( grunt ) {
 			},
 			files: [{
 				expand: true,
-				cwd: "../dist_dev",
-				src: ["**/*.less"],
-				ext: ".css",
-				dest: "../dist_dev"
+				cwd: './dist_dev',
+				src: ['**/*.less'],
+				ext: '.css',
+				dest: './dist_dev'
 			}]
 		},
 		dev: {
@@ -30,7 +30,7 @@ module.exports = function ( grunt ) {
 				cleancss: '<%= projectconfig.dev.less.lessCleanCss%>'
 			},
 			files: {
-				"../dist_dev/lib/css/style.css": "../src/lib/less/_root.less"
+				'./dist_dev/lib/css/style.css': './src/lib/less/_root.less'
 			}
 		},
 		release: {
@@ -41,7 +41,7 @@ module.exports = function ( grunt ) {
 				cleancss: '<%= projectconfig.release.less.lessCleanCss%>'
 			},
 			files: {
-				"../dist/lib/css/style.css": "../src/lib/less/_root.less"
+				'./dist/lib/css/style.css': './src/lib/less/_root.less'
 			}
 		}
 	};

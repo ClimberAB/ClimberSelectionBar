@@ -26,8 +26,8 @@ module.exports = function ( grunt ) {
 				{
 					expand: true,
 					flatten: false,
-					src: ['../dist_dev/**/*.*', '!../dist_dev/**/*.{min.js,png,gif,jpg,ico,psd,eot,svg,ttf,woff}'],
-					dest: '../dist_dev/'
+					src: ['./dist_dev/**/*.*', '!./dist_dev/**/*.{min.js,png,gif,jpg,ico,psd,eot,svg,ttf,woff}'],
+					dest: '.'
 				}
 			]
 		},
@@ -47,8 +47,8 @@ module.exports = function ( grunt ) {
 				{
 					expand: true,
 					flatten: false,
-					src: ['../dist/**/*.*', '!../dist/**/*.{min.js,png,gif,jpg,ico,psd,eot,svg,ttf,woff}'],
-					dest: '../dist/'
+					src: ['./dist/**/*.*', '!./dist/**/*.{min.js,png,gif,jpg,ico,psd,eot,svg,ttf,woff}'],
+					dest: '.'
 				}
 			]
 		},
@@ -64,8 +64,8 @@ module.exports = function ( grunt ) {
 				{
 					expand: true,
 					flatten: false,
-					src: ['../dist_dev/*.*', '!../dist_dev/**/*.{min.js,png,gif,jpg,ico,psd,eot,svg,ttf,woff}'],
-					dest: '../dist_dev/'
+					src: ['./dist_dev/*.*', '!./dist_dev/**/*.{min.js,png,gif,jpg,ico,psd,eot,svg,ttf,woff}'],
+					dest: '.'
 				}
 			]
 		}
@@ -83,8 +83,8 @@ module.exports = function ( grunt ) {
 				{
 					expand: true,
 					flatten: false,
-					src: ['../dist/**/*.*', '!../dist/**/*.{min.js,png,gif,jpg,ico,psd,eot,svg,ttf,woff}'],
-					dest: '../dist/'
+					src: ['./dist/**/*.*', '!./dist/**/*.{min.js,png,gif,jpg,ico,psd,eot,svg,ttf,woff}'],
+					dest: '.'
 				}
 			]
 		}

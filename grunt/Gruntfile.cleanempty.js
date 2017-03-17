@@ -12,7 +12,7 @@ module.exports = function( grunt ) {
             options: {
                 files: false
             },
-            src: ['../dist/**/*']
+            src: ['./dist/**/*']
         }
 
     };

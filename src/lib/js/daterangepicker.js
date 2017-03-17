@@ -118,8 +118,8 @@
                 '</div>' +
                 '<div class="ranges">' +
                     '<div class="range_inputs">' +
-                        '<button class="applyBtn" disabled="disabled" type="button"></button> ' +
-                        '<button class="cancelBtn" type="button"></button>' +
+                        '<button style="margin-bottom: 4px;" class="applyBtn" disabled="disabled" type="button"></button> ' +
+                        '<button style="margin-bottom: 4px;" class="cancelBtn" type="button"></button>' +
                     '</div>' +
                 '</div>' +
                
@@ -1121,7 +1121,7 @@
             this.isShowing = true;
         },
 
-        hide: function(e) {
+        hide: function(apply) {
             if (!this.isShowing) return;
 
             //incomplete date selection, revert to last values
@@ -1131,7 +1131,11 @@
             }
 
             //if a new date range was selected, invoke the user callback function
-            if (!this.startDate.isSame(this.oldStartDate) || !this.endDate.isSame(this.oldEndDate))
+            //if (!this.startDate.isSame(this.oldStartDate) || !this.endDate.isSame(this.oldEndDate))
+            //    this.callback(this.startDate, this.endDate, this.chosenLabel);
+
+            //always apply callback
+            if (apply)
                 this.callback(this.startDate, this.endDate, this.chosenLabel);
 
             //if picker is attached to a text input, update it
@@ -1146,7 +1150,7 @@
 
         toggle: function(e) {
             if (this.isShowing) {
-                this.hide();
+                this.hide(false);
             } else {
                 this.show();
             }
@@ -1163,7 +1167,7 @@
                 target.closest(this.container).length ||
                 target.closest('.calendar-table').length
                 ) return;
-            this.hide();
+            this.hide(false);
             this.element.trigger('outsideClick.daterangepicker', this);
         },
 
@@ -1390,14 +1394,14 @@
         },
 
         clickApply: function(e) {
-            this.hide();
+            this.hide(true);
             this.element.trigger('apply.daterangepicker', this);
         },
 
         clickCancel: function(e) {
             this.startDate = this.oldStartDate;
             this.endDate = this.oldEndDate;
-            this.hide();
+            this.hide(false);
             this.element.trigger('cancel.daterangepicker', this);
         },
 
@@ -1582,7 +1586,7 @@
         keydown: function(e) {
             //hide on tab or enter
             if ((e.keyCode === 9) || (e.keyCode === 13)) {
-                this.hide();
+                this.hide(false);
             }
         },
 

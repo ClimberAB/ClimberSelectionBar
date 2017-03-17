@@ -5,9 +5,9 @@
 [Tt]ests/
 web.*.config
 /dist_dev/
+.vscode/*
 /**/node_modules/
 /**/bower_components/
-/build/*_dev.zip
 .sublime-grunt.cache
 
 

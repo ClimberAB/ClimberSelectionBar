@@ -10,9 +10,9 @@ module.exports = function ( grunt ) {
 				force: true
 			},
 			src: [
-				'../dist_dev/**/*.bak',
-				'../dist_dev/**/*.less',
-				'../dist_dev/**/*.tmpl'
+				'./dist_dev/**/*.bak',
+				'./dist_dev/**/*.less',
+				'./dist_dev/**/*.tmpl'
 			],
 			filter: 'isFile'
 		},
@@ -21,9 +21,9 @@ module.exports = function ( grunt ) {
 				force: true
 			},
 			src: [
-				'../dist/**/*.bak',
-				'../dist/**/*.less',
-				'../dist/**/*.tmpl'
+				'./dist/**/*.bak',
+				'./dist/**/*.less',
+				'./dist/**/*.tmpl'
 			],
 			filter: 'isFile'
 		},
@@ -32,7 +32,7 @@ module.exports = function ( grunt ) {
 				force: true
 			},
 			src: [
-				'../dist_dev/**/*'
+				'./dist_dev/**/*'
 			]
 		},
 		empty_dist: {
@@ -40,7 +40,7 @@ module.exports = function ( grunt ) {
 				force: true
 			},
 			src: [
-				'../dist/**/*'
+				'./dist/**/*'
 			]
 		},
 		empty_desktop: {
@@ -48,7 +48,7 @@ module.exports = function ( grunt ) {
 				force: true
 			},
 			src: [
-				'<%=projectconfig.general.ExtensionNamespace%>/<%=projectconfig.general.ExtensionNameSafe%>/**/*'
+				'<%= projectconfig.general.LocalExtensionPath%>/<%= projectconfig.general.ExtensionNamespace%><%= projectconfig.general.ExtensionNameSafe%>/**/*'
 			]
 		}
 	};

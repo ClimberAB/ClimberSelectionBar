@@ -6,17 +6,17 @@ module.exports = function ( grunt ) {
 	return {
 		dev: {
 			options: {
-				jshintrc: ".jshintrc-dev",
+				jshintrc: '.jshintrc-dev',
 				ignores: []
 			},
-			defaults: ["<%=projectconfig.jsSources.dev%>"]
+			defaults: ['<%=projectconfig.jsSources.dev%>']
 		},
 		release: {
 			options: {
-				jshintrc: ".jshintrc-release",
+				jshintrc: '.jshintrc-release',
 				ignores: []
 			},
-			defaults: ["<%=projectconfig.jsSources.release%>"]
+			defaults: ['<%=projectconfig.jsSources.release%>']
 		}
 
 	};

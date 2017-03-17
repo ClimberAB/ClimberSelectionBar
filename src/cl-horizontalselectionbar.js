@@ -1,25 +1,25 @@
 define([
-    'jquery',
-    'underscore',
-    'qlik',
-    'ng!$q',
-    'ng!$http',
-    './properties',
-    './initialproperties',
-    'client.utils/state',
-    'objects.backend-api/field-api',
-    './lib/js/extensionUtils',
-    './lib/js/moment',
-    './lib/js/daterangepicker',
-
-    'general.models/library/dimension',
-    'text!./lib/css/style.css',
-    'text!./lib/css/daterangepicker.css',
-    'text!./lib/partials/template.html',
-    './lib/js/clTouch',
-    './lib/js/onLastRepeatDirective',
-  ],
-  function($, _, qlik, $q, $http, props, initProps, stateUtil, fieldApi, extensionUtils, moment, daterangepicker, dimension, cssContent, cssDaterangepicker, ngTemplate) {
+  'jquery',
+  'underscore',
+  'qlik',
+  'translator',
+  'ng!$q',
+  'ng!$http',
+  './properties',
+  './initialproperties',
+  'client.utils/state',
+  'objects.backend-api/field-api',
+  './lib/js/extensionUtils',
+  './lib/js/moment',
+  './lib/js/daterangepicker',
+  'general.models/library/dimension',
+  'text!./lib/css/style.css',
+  'text!./lib/css/daterangepicker.css',
+  'text!./lib/partials/template.html',
+  './lib/js/clTouch',
+  './lib/js/onLastRepeatDirective',
+],
+  function ($, _, qlik, translator, $q, $http, props, initProps, stateUtil, fieldApi, extensionUtils, moment, daterangepicker, dimension, cssContent, cssDaterangepicker, ngTemplate) {
     'use strict';
 
     //Virtual proxy fix for font path
@@ -28,11 +28,13 @@ define([
     console.log('prefix', prefix);
     //IE fix
     if (prefix) {
-      if (prefix.substr(0, 1) != '/') {
-        prefix = '/' + prefix
+      if (prefix.substr(0, 1) !== '/') {
+        prefix = '/' + prefix;
       }
     }
     console.log('prefix after', prefix);
+
+
 
     cssContent = cssContent.replace(new RegExp('__VirtualProxyPrefix__', 'g'), prefix);
 
@@ -43,7 +45,7 @@ define([
       var milli = momentDate.startOf('day').toDate().getTime();
       var offset = momentDate.utcOffset() * 60000;
       return ((milli + offset) / 86400 / 1000) + 25567 + 1;
-    };
+    }
 
     function getJsDateFromNumber(numDate) {
       // JavaScript dates can be constructed by passing milliseconds
@@ -52,17 +54,17 @@ define([
       // 1. Subtract number of days between Jan 1, 1900 and Jan 1, 1970, plus 1 (Google "excel leap year bug")             
       // 2. Convert to milliseconds.
       return new Date((numDate - (25567 + 1)) * 86400 * 1000);
-    };
+    }
 
     function getMillisecondFromDateNumber(numDate) {
       var offset = moment().utcOffset();
 
       return ((numDate - (25567 + 1)) * 86400) - offset;
-    };
+    }
 
     function getDateFromDateNumberWithFormat(numDate, dateFormat) {
       return moment(getMillisecondFromDateNumber(numDate), 'X').utc().format(dateFormat);
-    };
+    }
 
     function parseDate(date, dateFormat) {
       var parsedDate;
@@ -74,106 +76,90 @@ define([
         }
       }
 
-      /*
-      console.log('date',date);     
-      console.log('Number(date)',Number(date));  
-      console.log('_.isNumber(Number(date))',_.isNumber(Number(date))); 
-      console.log('Number(date) < 100000',Number(date) < 100000);    
-      console.log('dateFormat',dateFormat);     
-
-      console.log('parseDate',parsedDate);     
-*/
       return parsedDate;
 
-    };
-
-
+    }
 
     return {
 
       definition: props,
       initialProperties: initProps,
       snapshot: {
-        canTakeSnapshot: true
+        canTakeSnapshot: false
       },
       support: {
         export: true,
-        exportData: false,
+        exportData: false
       },
 
 
-      getDropFieldOptions: function(a, b, c, d) {
+      getDropFieldOptions: function (a, b, c, d) {
         d();
       },
 
-      getDropDimensionOptions: function(a, b, c, d) {
+      getDropDimensionOptions: function (a, b, c, d) {
         d();
       },
 
-      getDropMeasureOptions: function(a, b, c, d) {
+      getDropMeasureOptions: function (a, b, c, d) {
         d();
       },
 
-      resize: function($element, layout) {
+      resize: function ($element, layout) {
         this.$scope.setSizeMode($element);
         //Remove header if new card theme.
         if ($(".qv-card" && !layout.showTitles)) {
-          $(".qv-object-cl-horizontalselectionbar").find('header.thin').addClass('no-title') //.css({'height':'5px', 'padding-bottom':'2px'});
+          $(".qv-object-cl-horizontalselectionbar").find('header.thin').addClass('no-title');
         } else {
-          $(".qv-object-cl-horizontalselectionbar").find('header.thin').removeClass('no-title') //.css({'height':'', 'padding-bottom':''});
+          $(".qv-object-cl-horizontalselectionbar").find('header.thin').removeClass('no-title');
         };
       },
 
-      paint: function($element, layout) {
+      paint: function ($element, layout) {
 
         this.$scope.setSizeMode($element);
 
-        var app = qlik.currApp()
+        var _this = this;
+
+        var app = qlik.currApp();
         console.log('paint', this);
         console.log('layout', layout);
         console.log('fieldApi', fieldApi);
 
-        // app.visualization.create('listbox', null, {
-        //     title: 'Month',
-        //     qListObjectDef: {
-        //       qDef: {
-        //           qFieldDefs: ['Datum']
-        //       }
-        //     }
-        // }).then(model => {
-        //   model.show('my-listbox')
-        // })
-
-        app.getObjectProperties(layout.qInfo.qId).then(function(model) {
-          //console.log('model',model);
-        });
 
         //Remove header if new card theme.
         if ($(".qv-card" && !layout.showTitles)) {
-          $(".qv-object-cl-horizontalselectionbar").find('header.thin').addClass('no-title') //.css({'height':'5px', 'padding-bottom':'2px'});
+          $(".qv-object-cl-horizontalselectionbar").find('header.thin').addClass('no-title');
         } else {
-          $(".qv-object-cl-horizontalselectionbar").find('header.thin').removeClass('no-title') //.css({'height':'', 'padding-bottom':''});
+          $(".qv-object-cl-horizontalselectionbar").find('header.thin').removeClass('no-title');
         };
 
-
-
-        this.$scope.setFields(layout.kfLists);
         this.$scope.props = layout.props;
-
-        if (!this.$scope.initSelectionsApplied) {
-          this.$scope.setInitSelections();
-        };
-
-
         this.$scope.qId = layout.qInfo.qId;
 
-        console.log('this.$scope.fields', this.$scope.fields);
+        var format = {};
 
+        var localeInfo = this.backendApi.localeInfo;
+
+        format.CollationLocale = localeInfo.qCollation;
+        format.DateFormat = localeInfo.qDateFmt;
+        format.MonthNames = localeInfo.qCalendarStrings.qMonthNames;
+        format.DayNames = localeInfo.qCalendarStrings.qDayNames;
+        format.FirstWeekDay = localeInfo.FirstWeekDay;
+
+        _this.$scope.format = format;
+        _this.$scope.setFields(layout.kfLists);
+
+        if (!_this.$scope.initSelectionsApplied) {
+          _this.$scope.setInitSelections();
+        }
+
+        return qlik.Promise.resolve();
       },
 
       template: ngTemplate,
 
-      controller: ['$scope', '$element', '$timeout', function($scope, $element, $timeout) {
+      controller: ['$scope', '$element', '$timeout', function ($scope, $element, $timeout) {
         var app = qlik.currApp();
 
         $scope.selections = {
@@ -184,18 +170,18 @@ define([
           selectionMode: '',
         };
 
+        //$scope.format;
 
 
-        $scope.$on('onRepeatLast', function(scope, element, attrs) {
+        $scope.$on('onRepeatLast', function (scope, element, attrs) {
           //moment.locale('en');
 
           //Remove all containers
           $("[id^=daterangepicker-container-" + $scope.qId + "]").remove();
           //Append containers to the body and setup the daterangepicker
-          _.each($scope.fields, function(item) {
+          _.each($scope.fields, function (item) {
 
-            if (item.type == "DATERANGE") {
-              console.log('DateRANGE item', item)
+            if (item.type === "DATERANGE") {
               var daterangepickerContainerId = "daterangepicker-container-" + $scope.qId + '-' + item.id;
               var daterangepickerId = "daterange-" + $scope.qId + '-' + item.id;
 
@@ -203,34 +189,24 @@ define([
                 $("body").append('<div id="' + daterangepickerContainerId + '" class="bootstrap-horizontalselectionbar" style="position: absolute"></div>');
               }
               var vToday = item.dateToday;
-              var format = item.dateFormat;
+              //var format = item.dateFormat;
 
-              var onApplyCallback = function(start, end) {
-                $scope.selectDateFromAndTo(item.field, start.format(format), end.format(format), true);
+              var onApplyCallback = function (start, end) {
+                $scope.selectDateFromAndTo(item.field, start.format($scope.format.DateFormat), end.format($scope.format.DateFormat), true);
               };
-
-              var vTodayIsEndOfMonth = moment(vToday).endOf('month').format(format) == moment(vToday).format(format);
-              var vR12 = vTodayIsEndOfMonth ? [moment(vToday).subtract(11, 'month').startOf('month'), moment(vToday).endOf('month')] :
-                [moment(vToday).subtract(12, 'month').startOf('month'), moment(vToday).subtract(1, 'month').endOf('month')];
 
               var options = {
                 "showDropdowns": true,
-                "ranges": {
-                  'Yesterday': [moment(vToday), moment(vToday)],
-                  'Last 7 Days': [moment(vToday).subtract(6, 'days'), moment(vToday)],
-                  'Last 14 Days': [moment(vToday).subtract(13, 'days'), moment(vToday)],
-                  'Last 28 Days': [moment(vToday).subtract(27, 'days'), moment(vToday)],
-                  'Month to Date': [moment(vToday).startOf('month'), moment(vToday)],
-                  'Last Month': [moment(vToday).subtract(1, 'month').startOf('month'), moment(vToday).subtract(1, 'month').endOf('month')],
-                  'Year to Date': [moment(vToday).startOf('year'), moment(vToday)],
-                  'Rolling 12 months': vR12
-                    //'This Month': [moment(vToday).startOf('month'), moment(vToday).endOf('month')],
-                },
                 "locale": {
-                  "format": format,
-                  "firstDay": 1,
+                  "format": $scope.format.DateFormat,
+                  "firstDay": $scope.format.FirstWeekDay,
+                  "monthNames": $scope.format.MonthNames,
+                  "daysOfWeek": $scope.format.DayNames,
+                  "applyLabel": translator.get('Common.Apply'),
+                  "cancelLabel": translator.get('Common.Cancel'),
+                  "customRangeLabel": item.customRangeLabel,
                 },
-                "alwaysShowCalendars": false,
+                "alwaysShowCalendars": item.alwaysShowCalendars,
                 "parentEl": "#" + daterangepickerContainerId,
               };
 
@@ -243,6 +219,89 @@ define([
                 options.minDate = item.dateMin;
                 options.maxDate = item.dateMax;
               }
+              console.log('Daterange Item: ', item)
+
+              console.log('Daterange options: ', options)
+              if (item.dateRanges) {
+                options.ranges = {};
+                _.each(item.dateRanges, function (dateRange) {
+                  console.log('Daterange dateRange: ', dateRange)
+
+                  var vTodayIsEndOfMonth = moment(vToday).endOf('month').format($scope.format.DateFormat) == moment(vToday).format($scope.format.DateFormat);
+                  switch (dateRange.value) {
+                    case 'TODAY':
+                      options.ranges[dateRange.label] = [moment(vToday), moment(vToday)];
+                      break;
+                    case 'YESTERDAY':
+                      options.ranges[dateRange.label] = [moment(vToday).subtract(1, 'days'), moment(vToday).subtract(1, 'days')];
+                      break;
+                    case 'LAST07DAYS':
+                      options.ranges[dateRange.label] = [moment(vToday).subtract(6, 'days'), moment(vToday)];
+                      break;
+                    case 'LAST14DAYS':
+                      options.ranges[dateRange.label] = [moment(vToday).subtract(13, 'days'), moment(vToday)];
+                      break;
+                    case 'LAST28DAYS':
+                      options.ranges[dateRange.label] = [moment(vToday).subtract(27, 'days'), moment(vToday)];
+                      break;
+                    case 'LAST30DAYS':
+                      options.ranges[dateRange.label] = [moment(vToday).subtract(29, 'days'), moment(vToday)];
+                      break;
+                    case 'LAST60DAYS':
+                      options.ranges[dateRange.label] = [moment(vToday).subtract(59, 'days'), moment(vToday)];
+                      break;
+                    case 'LAST90DAYS':
+                      options.ranges[dateRange.label] = [moment(vToday).subtract(89, 'days'), moment(vToday)];
+                      break;
+                    case 'THISWEEK':
+                      options.ranges[dateRange.label] = [moment(vToday).startOf('week'), moment(vToday).endOf('week')];
+                      break;
+                    case 'LASTWEEK':
+                      options.ranges[dateRange.label] = [moment(vToday).subtract(1, 'week').startOf('week'), moment(vToday).subtract(1, 'week').endOf('week')];
+                      break;
+                    case 'THISMONTH':
+                      options.ranges[dateRange.label] = [moment(vToday).startOf('month'), moment(vToday).endOf('month')];
+                      break;
+                    case 'LASTMONTH':
+                      options.ranges[dateRange.label] = [moment(vToday).subtract(1, 'month').startOf('month'), moment(vToday).subtract(1, 'month').endOf('month')];
+                      break;
+                    case 'THISQUARTER':
+                      options.ranges[dateRange.label] = [moment(vToday).startOf('quarter'), moment(vToday).endOf('quarter')];
+                      break;
+                    case 'LASTQUARTER':
+                      options.ranges[dateRange.label] = [moment(vToday).subtract(1, 'quarter').startOf('quarter'), moment(vToday).subtract(1, 'quarter').endOf('quarter')];
+                      break;
+                    case 'THISYEAR':
+                      options.ranges[dateRange.label] = [moment(vToday).startOf('year'), moment(vToday).endOf('year')];
+                      break;
+                    case 'LASTYEAR':
+                      options.ranges[dateRange.label] = [moment(vToday).subtract(1, 'year').startOf('year'), moment(vToday).subtract(1, 'year').endOf('year')];
+                      break;
+                    case 'WTD':
+                      options.ranges[dateRange.label] = [moment(vToday).startOf('week'), moment(vToday)];
+                      break;
+                    case 'MTD':
+                      options.ranges[dateRange.label] = [moment(vToday).startOf('month'), moment(vToday)];
+                      break;
+                    case 'QTD':
+                      options.ranges[dateRange.label] = [moment(vToday).startOf('quarter'), moment(vToday)];
+                      break;
+                    case 'YTD':
+                      options.ranges[dateRange.label] = [moment(vToday).startOf('year'), moment(vToday)];
+                      break;
+                    case 'R12':
+                      options.ranges[dateRange.label] = [moment(vToday).subtract(11, 'month'), moment(vToday)];
+                      break;
+                    case 'R12FM':
+                      options.ranges[dateRange.label] = vTodayIsEndOfMonth ? [moment(vToday).subtract(11, 'month').startOf('month'), moment(vToday).endOf('month')] :
+                        [moment(vToday).subtract(12, 'month').startOf('month'), moment(vToday).subtract(1, 'month').endOf('month')];
+                      break;
+                    default:
+                      console.log('not a valid daterange');
+                  }
+                });
+              }
+              console.log('daterangepicker.options', options);
 
               $('#' + daterangepickerId).daterangepicker(options, onApplyCallback);
 
@@ -265,27 +324,27 @@ define([
         $scope.initSelectionsApplied = false;
         $scope.sessionStorageId = $scope.$parent.layout.qExtendsId ? $scope.$parent.layout.qExtendsId : $scope.$parent.layout.qInfo.qId;
 
-        $scope.setSizeMode = function($element) {
+        $scope.setSizeMode = function ($element) {
           $scope.sizeMode = ($(document).width() <= $scope.resolutionBreakpoint.width |
-              $($element).height() <= $scope.resolutionBreakpoint.height) ?
+            $($element).height() <= $scope.resolutionBreakpoint.height) ?
             ($($element).height() <= $scope.resolutionBreakpoint.xsmallheight ? 'X-SMALL' : 'SMALL') : '';
         }
 
-        $scope.getSizeMode = function() {
+        $scope.getSizeMode = function () {
           return ($(document).width() <= $scope.resolutionBreakpoint.width |
-              $($element).height() <= $scope.resolutionBreakpoint.height) ?
+            $($element).height() <= $scope.resolutionBreakpoint.height) ?
             ($($element).height() <= $scope.resolutionBreakpoint.xsmallheight ? 'X-SMALL' : 'SMALL') : '';
         }
 
-        $scope.getClass = function() {
+        $scope.getClass = function () {
           return stateUtil.isInAnalysisMode() ? "" : "no-interactions";
         };
         //*******************************
         //      TRANSFORM MODEL
         //*******************************
-        $scope.setFields = function(kfLists) {
+        $scope.setFields = function (kfLists) {
           var newFields = [];
-          _.each(kfLists, function(item, idx) {
+          _.each(kfLists, function (item, idx) {
             var qMatrix = item.qListObject.qDataPages[0] ? item.qListObject.qDataPages[0].qMatrix : [];
 
             switch (item.listType) {
@@ -325,7 +384,7 @@ define([
                 break;
               case "FLAG":
                 var data = [];
-                _.each(qMatrix, function(flag) {
+                _.each(qMatrix, function (flag) {
                   var iconFilename = flag[0].qText.replace(' ', '-');
                   var newFlag = flag;
                   newFlag.icon = prefix + '/Extensions/cl-HorizontalSelectionBar/lib/images/flags/' + iconFilename + '.png'
@@ -347,28 +406,30 @@ define([
                 var displayText = "";
                 var dateStart = null;
                 var dateEnd = null;
-                var format = item.date.format;
-                var displayFormat = item.date.displayFormat === 'DEFAULT' ? format : item.date.displayFormat;
-                var dateMin = parseDate(item.date.rangeMin, format);
-                var dateMax = parseDate(item.date.rangeMax, format);
-                var dateInitSelectionFrom = parseDate(item.date.initSelectionFrom, format);
-                var dateInitSelectionTo = parseDate(item.date.initSelectionTo, format); 
-                var dateToday = isNaN(item.date.today) ? moment() : parseDate(item.date.today, format);
-
+                var dateFormat = $scope.format.DateFormat;
+                var displayFormat = item.date.displayFormat === 'DEFAULT' ? dateFormat : item.date.displayFormat;
+                var dateMin = parseDate(item.date.rangeMin, dateFormat);
+                var dateMax = parseDate(item.date.rangeMax, dateFormat);
+                var dateInitSelectionFrom = parseDate(item.date.initSelectionFrom, dateFormat);
+                var dateInitSelectionTo = parseDate(item.date.initSelectionTo, dateFormat);
+                var dateToday = isNaN(item.date.dateFormat) ? moment() : parseDate(item.date.today, dateFormat);
+                var dateRanges = item.date.useDateRanges ? item.date.dateRanges : null;
+                var alwaysShowCalendars = !item.date.useDateRanges ? true : item.date.alwaysShowCalenders;
+                var customRangeLabel = item.date.customRangeLabel;
                 var isNotARange = false;
-                parseDate(item.date.rangeMin, format);
-                  
+                parseDate(item.date.rangeMin, dateFormat);
+
 
                 if (item.qListObject.qDimensionInfo.qStateCounts.qSelected > 0) {
                   if (item.qListObject.qDimensionInfo.qStateCounts.qSelected < (item.date.max - item.date.min + 1)) {
                     isNotARange = true;
                   }
 
-                  dateStart = parseDate(item.date.min, format);
-                  dateEnd = parseDate(item.date.max, format);
+                  dateStart = parseDate(item.date.min, dateFormat);
+                  dateEnd = parseDate(item.date.max, dateFormat);
                   displayText = parseDate(item.date.min, displayFormat) + ' - ' + parseDate(item.date.max, displayFormat);
                 } else {
-                  displayText = 'Select a date range';
+                  displayText = item.date.defaultText;
                 }
 
 
@@ -380,7 +441,7 @@ define([
                   visible: item.listVisible,
                   dateFromInitSelection: dateInitSelectionFrom,
                   dateToInitSelection: dateInitSelectionTo,
-                  dateFormat: format,
+                  dateFormat: dateFormat,
                   displayDateFormat: displayFormat,
                   displayText: displayText,
                   isNotARange: isNotARange,
@@ -390,6 +451,9 @@ define([
                   dateMin: dateMin,
                   dateMax: dateMax,
                   label: item.label,
+                  dateRanges: dateRanges,
+                  alwaysShowCalendars: alwaysShowCalendars,
+                  customRangeLabel: customRangeLabel,
                   data: qMatrix,
                 });
                 break;
@@ -405,7 +469,7 @@ define([
         //*******************************
         //      HANDLE SELECTIONS
         //*******************************
-        $scope.selectValue = function(event, field, item, bool) {
+        $scope.selectValue = function (event, field, item, bool) {
           if (event.ctrlKey) {
             $scope.selectFieldValues(field, [$scope.getValue(item)], false);
           } else {
@@ -413,7 +477,7 @@ define([
           }
         };
 
-        $scope.selectElemNo = function(event, index, elemNo, bool) {
+        $scope.selectElemNo = function (event, index, elemNo, bool) {
 
 
           if (event.ctrlKey) {
@@ -424,7 +488,7 @@ define([
           }
         };
 
-        $scope.selectElemNos = function(index, elemNos, bool) {
+        $scope.selectElemNos = function (index, elemNos, bool) {
           console.log('elemNo index', index);
           console.log('elemNo', elemNos);
 
@@ -436,49 +500,48 @@ define([
         };
 
 
-        $scope.selectDateFromAndTo = function(field, fromDate, toDate, bool) {
+        $scope.selectDateFromAndTo = function (field, fromDate, toDate, bool) {
           field = field.substring(0, 1) == "=" ? field.substring(1, field.length) : field;
-          app.field(field).selectMatch(">=" + fromDate + "<=" + toDate, bool).then(function(reply) {});
+          app.field(field).selectMatch(">=" + fromDate + "<=" + toDate, bool).then(function (reply) { });
         };
 
-        $scope.selectFieldValues = function(field, items, bool) {
+        $scope.selectFieldValues = function (field, items, bool) {
           console.log('items', items);
           field = field.substring(0, 1) == "=" ? field.substring(1, field.length) : field;
           console.log('field', field);
           var selectArray = [];
-          _.each(items, function(item) {
+          _.each(items, function (item) {
             selectArray.push(JSON.parse(item));
           });
 
           console.log('selectArray', selectArray);
 
-          app.field(field).selectValues(selectArray, bool).then(function(reply) {
-
-          }).catch(function(err) {
-            location.reload(true);
+          app.field(field).selectValues(selectArray, bool).catch(function (err) {
+            console.error(err);
+            //location.reload(true);
           })
         };
 
         //*******************************
         //      HELPER FUNCTIONS
         //*******************************
-        $scope.setVariable = function(variable, value) {
-          app.variable.setStringValue(variable, value).then(function() {});
+        $scope.setVariable = function (variable, value) {
+          app.variable.setStringValue(variable, value).then(function () { });
         };
 
-        $scope.getValue = function(item) {
+        $scope.getValue = function (item) {
           return isNaN(item.qNum) ? JSON.stringify({
             qText: item.qText
           }) : JSON.stringify(item.qNum);
         };
 
 
-        $scope.showField = function(field) {
+        $scope.showField = function (field) {
           return field.visible && !_.isEmpty(field.data);
         };
 
-        $scope.changeAlternativeDimensions = function(oldDim, newDim, idx, chartId) {
-          app.getObject(chartId).then(function(chart) {
+        $scope.changeAlternativeDimensions = function (oldDim, newDim, idx, chartId) {
+          app.getObject(chartId).then(function (chart) {
             var patches = [{
               "qOp": "replace",
               "qPath": "qHyperCubeDef/qDimensions/0",
@@ -493,29 +556,29 @@ define([
           });
         };
 
-        $scope.prepareAlternativeDimension = function(altDimension) {
+        $scope.prepareAlternativeDimension = function (altDimension) {
           var sheetId = qlik.navigation.getCurrentSheetId();
-          app.getObject(sheetId.sheetId).then(function(sheet) {
+          app.getObject(sheetId.sheetId).then(function (sheet) {
             var lineCharts = [];
 
-            _.each(sheet.layout.cells, function(cell) {
+            _.each(sheet.layout.cells, function (cell) {
               if (cell.type == 'linechart') {
                 lineCharts.push(cell.name);
               }
             });
 
-            _.each(lineCharts, function(linechartID) {
-              app.getObjectProperties(linechartID).then(function(linechart) {
-                app.getObject(linechartID).then(function(chart) {
+            _.each(lineCharts, function (linechartID) {
+              app.getObjectProperties(linechartID).then(function (linechart) {
+                app.getObject(linechartID).then(function (chart) {
                   chart.clearSoftPatches();
 
                   if (linechart.properties.qHyperCubeDef.qLayoutExclude.qHyperCubeDef.qDimensions) {
                     if (linechart.properties.qHyperCubeDef.qLayoutExclude.qHyperCubeDef.qDimensions.length > 0) {
                       var oldDim = linechart.properties.qHyperCubeDef.qDimensions[0];
 
-                      _.each(linechart.properties.qHyperCubeDef.qLayoutExclude.qHyperCubeDef.qDimensions, function(altDim, idx) {
+                      _.each(linechart.properties.qHyperCubeDef.qLayoutExclude.qHyperCubeDef.qDimensions, function (altDim, idx) {
                         if (altDim.qLibraryId) {
-                          dimension.getProperties(altDim.qLibraryId).then(function(libraryDim) {
+                          dimension.getProperties(altDim.qLibraryId).then(function (libraryDim) {
                             if (altDimension == libraryDim.properties.qDim.title) {
                               $scope.changeAlternativeDimensions(oldDim, altDim, idx, linechartID);
                             }
@@ -537,7 +600,7 @@ define([
         //*******************************
         //      INITIAL SELECTIONS
         //*******************************
-        $scope.checkInitSelections = function() {
+        $scope.checkInitSelections = function () {
           var sessionStorageToken = JSON.parse(sessionStorage.getItem($scope.sessionStorageId));
           var selectionsApplied = sessionStorageToken ? sessionStorageToken.selectionApplied : false;
 
@@ -546,11 +609,11 @@ define([
           }
         };
 
-        $scope.setInitSelections = function() {
+        $scope.setInitSelections = function () {
           if ($scope.willApplyInitSelections) {
             console.log('Init select daterange');
 
-            _.each($scope.fields, function(item, idx) {
+            _.each($scope.fields, function (item, idx) {
               var path = '/kfLists/' + idx + '/qListObjectDef';
               if (item.type != 'VARIABLE' && item.type != 'DATERANGE') {
                 if (item.initSelection != '') {
@@ -564,7 +627,7 @@ define([
                     console.log('item.initSelectionSeparator', item.initSelectionSeparator);
                     var items = item.initSelection.split(item.initSelectionSeparator);
                     var selectArray = [];
-                    _.each(items, function(stringItem) {
+                    _.each(items, function (stringItem) {
                       selectArray.push(isNaN(stringItem) ? "{\"qText\": \"" + stringItem + "\"}" : stringItem);
                     });
 
@@ -639,9 +702,9 @@ define([
         //*******************************
         //      HANDLE INPUT
         //*******************************
-        $scope.onActivate = function($event) {};
+        $scope.onActivate = function ($event) { };
 
-        $scope.onSwipeStart = function($event) {
+        $scope.onSwipeStart = function ($event) {
           var target = $($event.target);
           var idx = $($event.target).index();
           var field = target.attr('field');
@@ -668,7 +731,7 @@ define([
           }
         };
 
-        $scope.onSwipeUpdate = function($event) {
+        $scope.onSwipeUpdate = function ($event) {
           var target = $($event.originalEvent.target);
           var field = target.attr('field');
           if (field == $scope.selections.field) {
@@ -682,7 +745,7 @@ define([
 
               var list = $($event.originalEvent.target.parentElement.children);
 
-              list.slice($scope.selections.swipe_idx_min, $scope.selections.swipe_idx_max + 1).each(function(item) {
+              list.slice($scope.selections.swipe_idx_min, $scope.selections.swipe_idx_max + 1).each(function (item) {
                 var elem = this;
                 if ($scope.selections.selectionsMode) {
                   if (!$(elem).hasClass('S')) {
@@ -712,12 +775,12 @@ define([
           }
         };
 
-        $scope.onSwipeCancel = function($event) {
+        $scope.onSwipeCancel = function ($event) {
           console.log('swipecancel event called', $event);
           console.log('datavalue: ', $event.target.attributes.datavalue.value);
         };
 
-        $scope.onSwipe = function($event) {
+        $scope.onSwipe = function ($event) {
           $scope.selections.swipe_idx_min = -1;
           $scope.selections.swipe_idx_max = -1;
 

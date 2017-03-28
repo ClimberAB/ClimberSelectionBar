@@ -24,18 +24,12 @@ define([
 
     //Virtual proxy fix for font path
     var prefix = window.location.pathname.substr(0, window.location.pathname.toLowerCase().lastIndexOf("/sense/app/"));
-    console.log('window.location.pathname', window.location.pathname);
-    console.log('prefix', prefix);
     //IE fix
     if (prefix) {
       if (prefix.substr(0, 1) !== '/') {
         prefix = '/' + prefix;
       }
     }
-    console.log('prefix after', prefix);
-
-
-
     cssContent = cssContent.replace(new RegExp('__VirtualProxyPrefix__', 'g'), prefix);
 
     extensionUtils.addStyleToHeader(cssContent);
@@ -117,15 +111,16 @@ define([
 
       paint: function ($element, layout) {
 
+        console.groupCollapsed('Basic Objects');
+        console.info('$element:');
+        console.log($element);
+        console.info('layout:');
+        console.log(layout);
+        console.groupEnd();
+
         this.$scope.setSizeMode($element);
 
         var _this = this;
-
-        var app = qlik.currApp();
-        console.log('paint', this);
-        console.log('layout', layout);
-        console.log('fieldApi', fieldApi);
-
 
         //Remove header if new card theme.
         if ($(".qv-card" && !layout.showTitles)) {
@@ -144,8 +139,20 @@ define([
         format.CollationLocale = localeInfo.qCollation;
         format.DateFormat = localeInfo.qDateFmt;
         format.MonthNames = localeInfo.qCalendarStrings.qMonthNames;
-        format.DayNames = localeInfo.qCalendarStrings.qDayNames;
-        format.FirstWeekDay = localeInfo.FirstWeekDay;
+        format.FirstWeekDay = localeInfo.qFirstWeekDay + 1 > 6 ? 0 : localeInfo.qFirstWeekDay + 1;
+        format.DayNames = _.clone(localeInfo.qCalendarStrings.qDayNames);
+
+        console.log('format before', format.DayNames);
+        if (format.FirstWeekDay > 0) {
+          for (var index = 0; index < format.FirstWeekDay; index++) {
+            format.DayNames.unshift(format.DayNames.pop());
+                  console.log('format inside loop', format.DayNames);
+          }
+        } 
+        
+
+        console.log('localeInfo ', localeInfo)
+        console.log('format ', format)
 
         _this.$scope.format = format;
         _this.$scope.setFields(layout.kfLists);
@@ -170,11 +177,8 @@ define([
           selectionMode: '',
         };
 
-        //$scope.format;
-
 
         $scope.$on('onRepeatLast', function (scope, element, attrs) {
-          //moment.locale('en');
 
           //Remove all containers
           $("[id^=daterangepicker-container-" + $scope.qId + "]").remove();
@@ -189,7 +193,6 @@ define([
                 $("body").append('<div id="' + daterangepickerContainerId + '" class="bootstrap-horizontalselectionbar" style="position: absolute"></div>');
               }
               var vToday = item.dateToday;
-              //var format = item.dateFormat;
 
               var onApplyCallback = function (start, end) {
                 $scope.selectDateFromAndTo(item.field, start.format($scope.format.DateFormat), end.format($scope.format.DateFormat), true);
@@ -219,13 +222,10 @@ define([
                 options.minDate = item.dateMin;
                 options.maxDate = item.dateMax;
               }
-              console.log('Daterange Item: ', item)
 
-              console.log('Daterange options: ', options)
               if (item.dateRanges) {
                 options.ranges = {};
                 _.each(item.dateRanges, function (dateRange) {
-                  console.log('Daterange dateRange: ', dateRange)
 
                   var vTodayIsEndOfMonth = moment(vToday).endOf('month').format($scope.format.DateFormat) == moment(vToday).format($scope.format.DateFormat);
                   switch (dateRange.value) {
@@ -424,7 +424,7 @@ define([
                   if (item.qListObject.qDimensionInfo.qStateCounts.qSelected < (item.date.max - item.date.min + 1)) {
                     isNotARange = true;
                   }
-
+                  console.log('displayText item',item);
                   dateStart = parseDate(item.date.min, dateFormat);
                   dateEnd = parseDate(item.date.max, dateFormat);
                   displayText = parseDate(item.date.min, displayFormat) + ' - ' + parseDate(item.date.max, displayFormat);
@@ -489,14 +489,8 @@ define([
         };
 
         $scope.selectElemNos = function (index, elemNos, bool) {
-          console.log('elemNo index', index);
-          console.log('elemNo', elemNos);
-
           var path = '/kfLists/' + index + '/qListObjectDef';
-          console.log('path', path);
-
           $scope.ext.model.enigmaModel.selectListObjectValues(path, elemNos, bool, false);
-
         };
 
 
@@ -506,15 +500,12 @@ define([
         };
 
         $scope.selectFieldValues = function (field, items, bool) {
-          console.log('items', items);
           field = field.substring(0, 1) == "=" ? field.substring(1, field.length) : field;
-          console.log('field', field);
           var selectArray = [];
           _.each(items, function (item) {
             selectArray.push(JSON.parse(item));
           });
 
-          console.log('selectArray', selectArray);
 
           app.field(field).selectValues(selectArray, bool).catch(function (err) {
             console.error(err);
@@ -611,12 +602,11 @@ define([
 
         $scope.setInitSelections = function () {
           if ($scope.willApplyInitSelections) {
-            console.log('Init select daterange');
 
             _.each($scope.fields, function (item, idx) {
               var path = '/kfLists/' + idx + '/qListObjectDef';
-              if (item.type != 'VARIABLE' && item.type != 'DATERANGE') {
-                if (item.initSelection != '') {
+              if (item.type !== 'VARIABLE' && item.type !== 'DATERANGE') {
+                if (item.initSelection !== '') {
 
                   var selectMatchEnablers = ['=', '<', '>'];
 
@@ -624,9 +614,8 @@ define([
                     app.field(item.field).clear();
                     app.field(item.field).selectMatch(item.initSelection);
                   } else {
-                    console.log('item.initSelectionSeparator', item.initSelectionSeparator);
-                    var items = item.initSelection.split(item.initSelectionSeparator);
                     var selectArray = [];
+                    var items = item.initSelection.split(item.initSelectionSeparator ? item.initSelectionSeparator : ';');
                     _.each(items, function (stringItem) {
                       selectArray.push(isNaN(stringItem) ? "{\"qText\": \"" + stringItem + "\"}" : stringItem);
                     });
@@ -635,24 +624,6 @@ define([
                   }
 
 
-                  /*
-                  $scope.ext.model.enigmaModel.searchListObjectFor(path,item.initSelection).then(function(reply){
-                     console.log('enigmaModel Field',reply);
-                     
-                          $scope.ext.model.enigmaModel.getLayout().then(function(layout){
-                             console.log('enigmaModel Field',layout.kfLists[idx].qListObject.qDimensionInfo.qStateCounts );
-                       
-                        if (layout.kfLists[idx].qListObject.qDimensionInfo.qStateCounts.qSelected == 0) {   
-                         console.log('acceptListObjectSearch Field');
-                           $scope.ext.model.enigmaModel.acceptListObjectSearch(path,false, false);
-                        } else {
-                           
-                              console.log('abortListObjectSearch Field');               
-                           $scope.ext.model.enigmaModel.abortListObjectSearch(path);
-                        }
-                      });
-                  });
-                   */
                 }
               }
               if (item.type == 'VARIABLE') {
@@ -660,30 +631,8 @@ define([
                   $scope.setVariable(item.variable, item.initSelection);
                 }
               }
-              if (item.type == 'DATERANGE') {
-                console.log('Init select daterange', item);
-                if (item.dateFromInitSelection != '' && item.dateToInitSelection != '') {
-                  /*
-                  var qMatch = '>=' + item.dateFromInitSelection + '<=' + item.dateToInitSelection;
-                  console.log('qMatch',qMatch);
-                  $scope.ext.model.enigmaModel.searchListObjectFor(path, qMatch).then(function(reply){
-                      $scope.ext.model.enigmaModel.getLayout().then(function(layout){
-                        console.log('enigmaModel',layout.kfLists[idx].qListObject.qDimensionInfo.qStateCounts.qSelected );
-                        console.log('enigmaModel',layout.kfLists[idx].qListObject.qDimensionInfo.qStateCounts.qSelected == 0 &&
-                            layout.kfLists[idx].qListObject.qDimensionInfo.qStateCounts.qSelectedExcluded == 0 );
-                        console.log('enigmaModel',layout.kfLists[idx].qListObject.qDimensionInfo.qStateCounts );
-                        
-                        if ((layout.kfLists[idx].qListObject.qDimensionInfo.qStateCounts.qSelected == 0 &&           
-                            layout.kfLists[idx].qListObject.qDimensionInfo.qStateCounts.qSelectedExcluded == 0) || layout.kfLists[idx].qListObject.qDimensionInfo.qStateCounts.qAlternative != 0) {
-                           console.log('acceptListObjectSearch');
-                           $scope.ext.model.enigmaModel.acceptListObjectSearch(path,false, false);
-                        } else {
-                          console.log('abortListObjectSearch');
-                           $scope.ext.model.enigmaModel.abortListObjectSearch(path);
-                        }
-                      });
-                  });
-                  */
+              if (item.type === 'DATERANGE') {
+                if (item.dateFromInitSelection !== '' && item.dateToInitSelection != '') {
                   $scope.selectDateFromAndTo(item.field, item.dateFromInitSelection, item.dateToInitSelection, false);
                 }
               }
@@ -718,12 +667,10 @@ define([
 
           if (typeof value != typeof undefined) {
             if ($scope.selections.selectionsMode) {
-              console.log('SwipeStart SelectionsMode', value);
               $scope.selections.values_to_select.push(value);
               target.removeClass('A X O');
               target.addClass('S');
             } else {
-              console.log('SwipeStart !SelectionsMode', value);
               $scope.selections.values_to_select.push(value);
               target.removeClass('S');
               target.addClass('X');
@@ -776,8 +723,6 @@ define([
         };
 
         $scope.onSwipeCancel = function ($event) {
-          console.log('swipecancel event called', $event);
-          console.log('datavalue: ', $event.target.attributes.datavalue.value);
         };
 
         $scope.onSwipe = function ($event) {

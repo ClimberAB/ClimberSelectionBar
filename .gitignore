@@ -5,6 +5,7 @@
 [Tt]ests/
 web.*.config
 /dist_dev/
+/dist/
 .vscode/*
 /**/node_modules/
 /**/bower_components/

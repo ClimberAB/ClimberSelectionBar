@@ -1,6 +1,6 @@
 define(["underscore",
-  "./lib/js/components/pp-climber/pp-climber",
-], function(_) {
+	"./lib/js/components/pp-cl-about/pp-cl-about"
+], function (_) {
   'use strict';
 
   //var app = qlik.currApp();
@@ -8,9 +8,19 @@ define(["underscore",
   // ****************************************************************************************
   // Dimensions & Measures
   // ****************************************************************************************
+  var updateMinMaxDate = function (data) {
+    if (data.listType === "DATERANGE") {
+      var field = data.qListObjectDef.qDef.qFieldDefs[0].substring(0, 1) === "=" ? data.qListObjectDef.qDef.qFieldDefs[0].substring(1) : data.qListObjectDef.qDef.qFieldDefs[0];
+      data.date.min.qValueExpression.qExpr = "=Min(" + field + ")";
+      data.date.max.qValueExpression.qExpr = "=Max(" + field + ")";
+    } else {
+      data.date.min.qValueExpression.qExpr = "";
+      data.date.max.qValueExpression.qExpr = "";
+    }
+  };
 
   var dateRangeOptions = [{
-    value: "TODAY",     
+    value: "TODAY",
     label: "Today",
   }, {
     value: "YESTERDAY",
@@ -78,7 +88,6 @@ define(["underscore",
   }];
 
   var lists = {
-
     type: "array",
     translation: "Lists",
     ref: "kfLists",
@@ -116,41 +125,32 @@ define(["underscore",
           value: "DATERANGE",
           label: "Date range picker",
         }],
-        change: function(data) {
-          if (data.listType == "DATERANGE") {
-            data.date.min.qValueExpression.qExpr = "=Min(" + data.qListObjectDef.qDef.qFieldDefs[0] + ")";
-            data.date.max.qValueExpression.qExpr = "=Max(" + data.qListObjectDef.qDef.qFieldDefs[0] + ")";
-          } else {
-            data.date.min.qValueExpression.qExpr = "";
-            data.date.max.qValueExpression.qExpr = "";
-          }
-        }
+        change: function (data) {
+          updateMinMaxDate(data);
+        },
       },
       field: {
         component: "expression",
-        expression: "optional",
-        expressionType: "dimension",
         ref: "qListObjectDef.qDef.qFieldDefs.0",
         defaultValue: "",
         label: "Field",
-        show: function(data) {
-          return data.listType == "FIELD" || data.listType == "FLAG" || data.listType == "DATERANGE";
+        show: function (data) {
+          return data.listType === "FIELD" || data.listType === "FLAG" || data.listType === "DATERANGE";
         },
-        change: function(data) {
-          if (data.label == '') {
+        change: function (data) {
+          if (data.label === '') {
             data.label = data.qListObjectDef.qDef.qFieldDefs[0];
           }
-          if (data.listType == "DATERANGE") {
-            data.date.min.qValueExpression.qExpr = "=Min(" + data.qListObjectDef.qDef.qFieldDefs[0] + ")";
-            data.date.max.qValueExpression.qExpr = "=Max(" + data.qListObjectDef.qDef.qFieldDefs[0] + ")";
+          if (data.listType === "DATERANGE") {
+            updateMinMaxDate(data);
           }
         }
       },
       fieldWarning: {
         component: "text",
         translation: "Field is a calculated dimension, initial selections not supported",
-        show: function(data) {
-          return (data.listType == "FIELD" || data.listType == "FLAG" || data.listType == "DATERANGE") && data.qListObjectDef.qDef.qFieldDefs[0].substring(0, 1) == "=";
+        show: function (data) {
+          return (data.listType === "FIELD" || data.listType === "FLAG" || data.listType === "DATERANGE") && data.qListObjectDef.qDef.qFieldDefs[0].substring(0, 1) === "=";
         }
       },
       initSelection: {
@@ -158,11 +158,11 @@ define(["underscore",
         ref: "initSelection",
         expression: "optional",
         label: "Initial selection",
-        show: function(data) {
-          return data.listType != "DATERANGE";
+        show: function (data) {
+          return data.listType !== "DATERANGE";
         },
-        readOnly: function(data) {
-          return data.qListObjectDef.qDef.qFieldDefs[0].substring(0, 1) == "="
+        readOnly: function (data) {
+          return data.qListObjectDef.qDef.qFieldDefs[0].substring(0, 1) === "=";
         }
       },
       initSelectionSeparatorComma: {
@@ -178,19 +178,19 @@ define(["underscore",
           value: false,
           label: "Custom separator",
         }],
-        show: function(data) {
-          return data.listType != "DATERANGE";
+        show: function (data) {
+          return data.listType !== "DATERANGE";
         },
       },
       initSelectionSeparator: {
         type: "string",
         ref: "initSelectionSeparator",
         label: "Custom separator",
-        show: function(data) {
-          return data.listType != "DATERANGE" && !data.initSelectionSeparatorComma;
+        show: function (data) {
+          return data.listType !== "DATERANGE" && !data.initSelectionSeparatorComma;
         },
-        readOnly: function(data) {
-          return data.qListObjectDef.qDef.qFieldDefs[0].substring(0, 1) == "="
+        readOnly: function (data) {
+          return data.qListObjectDef.qDef.qFieldDefs[0].substring(0, 1) === "=";
         }
       },
       customSortOrder: {
@@ -206,7 +206,7 @@ define(["underscore",
           value: false,
           label: "Hide",
         }],
-        show: function(data) {
+        show: function (data) {
           return data.listType == "FIELD" || data.listType == "FLAG";
         },
       },
@@ -226,7 +226,7 @@ define(["underscore",
           label: "Descending"
         }],
         defaultValue: 0,
-        show: function(data) {
+        show: function (data) {
           return data.customSortOrder && (data.listType == "FIELD" || data.listType == "FLAG");
         },
       },
@@ -246,7 +246,7 @@ define(["underscore",
           label: "Descending"
         }],
         defaultValue: 0,
-        show: function(data) {
+        show: function (data) {
           return data.customSortOrder && (data.listType == "FIELD" || data.listType == "FLAG");
         },
       },
@@ -266,7 +266,7 @@ define(["underscore",
           label: "Descending"
         }],
         defaultValue: 0,
-        show: function(data) {
+        show: function (data) {
           return data.customSortOrder && (data.listType == "FIELD" || data.listType == "FLAG");
         },
       },
@@ -286,7 +286,7 @@ define(["underscore",
           label: "Descending"
         }],
         defaultValue: 0,
-        show: function(data) {
+        show: function (data) {
           return data.customSortOrder && (data.listType == "FIELD" || data.listType == "FLAG");
         },
       },
@@ -306,7 +306,7 @@ define(["underscore",
           label: "Descending"
         }],
         defaultValue: 0,
-        show: function(data) {
+        show: function (data) {
           return data.customSortOrder && (data.listType == "FIELD" || data.listType == "FLAG");
         },
       },
@@ -315,10 +315,10 @@ define(["underscore",
         ref: "variable",
         label: "Variable",
         defaultValue: "",
-        show: function(data) {
+        show: function (data) {
           return data.listType == "VARIABLE";
         },
-        change: function(data) {
+        change: function (data) {
           data.variable != "" ? data.variableValue.qStringExpression.qExpr = "=" + data.variable : "";
         },
       },
@@ -335,7 +335,7 @@ define(["underscore",
         ref: "date.defaultText",
         label: "No selection text",
         defaultValue: "Select a date range",
-        show: function(data) {
+        show: function (data) {
           return data.listType == "DATERANGE";
         }
       },
@@ -345,7 +345,7 @@ define(["underscore",
         expression: "optional",
         translation: "Date from initial selection",
         defaultValue: "",
-        show: function(data) {
+        show: function (data) {
           return data.listType == "DATERANGE";
         },
       },
@@ -355,7 +355,7 @@ define(["underscore",
         expression: "optional",
         translation: "Date to initial selection",
         defaultValue: "",
-        show: function(data) {
+        show: function (data) {
           return data.listType == "DATERANGE";
         },
       },
@@ -380,8 +380,8 @@ define(["underscore",
         }, {
           value: "YYYYMMDD",
           label: "19800101",
-        }, ],
-        show: function(data) {
+        },],
+        show: function (data) {
           return data.listType == "DATERANGE";
         },
       },
@@ -391,7 +391,7 @@ define(["underscore",
         expression: "optional",
         translation: "Daterange min expression",
         defaultValue: "",
-        show: function(data) {
+        show: function (data) {
           return data.listType == "DATERANGE";
         },
       },
@@ -401,7 +401,7 @@ define(["underscore",
         expression: "optional",
         translation: "Daterange max expression",
         defaultValue: "",
-        show: function(data) {
+        show: function (data) {
           return data.listType == "DATERANGE";
         },
       },
@@ -418,7 +418,7 @@ define(["underscore",
           value: false,
           label: "No",
         }],
-        show: function(data) {
+        show: function (data) {
           return data.listType == "DATERANGE";
         },
       },
@@ -427,7 +427,7 @@ define(["underscore",
         ref: "date.customRangeLabel",
         label: "Custom range label",
         defaultValue: "Custom Range",
-        show: function(data) {
+        show: function (data) {
           return data.listType == "DATERANGE" && data.date.useDateRanges;
         }
       },
@@ -444,7 +444,7 @@ define(["underscore",
           value: false,
           label: "Hide",
         }],
-        show: function(data) {
+        show: function (data) {
           return data.listType == "DATERANGE" && data.date.useDateRanges;
         },
       },
@@ -454,7 +454,7 @@ define(["underscore",
         expression: "optional",
         translation: "Today expression",
         defaultValue: "",
-        show: function(data) {
+        show: function (data) {
           return data.listType == "DATERANGE" && data.date.useDateRanges;
         },
       },
@@ -465,11 +465,11 @@ define(["underscore",
         label: "Date range 01",
         defaultValue: dateRangeOptions[0].value,
         options: dateRangeOptions,
-        show: function(data) {
+        show: function (data) {
           return data.listType == "DATERANGE" && data.date.useDateRanges;
         },
-        change: function(data) {
-          data.date.dateRanges[0].label = _.find(dateRangeOptions, function(option) {
+        change: function (data) {
+          data.date.dateRanges[0].label = _.find(dateRangeOptions, function (option) {
             return option.value === data.date.dateRanges[0].value;
           }).label;
         }
@@ -479,7 +479,7 @@ define(["underscore",
         ref: "date.dateRanges.0.label",
         label: "Label date range 01",
         defaultValue: dateRangeOptions[0].label,
-        show: function(data) {
+        show: function (data) {
           return data.listType == "DATERANGE" && data.date.useDateRanges;
         },
       },
@@ -490,11 +490,11 @@ define(["underscore",
         label: "Date range 02",
         defaultValue: dateRangeOptions[2].value,
         options: dateRangeOptions,
-        show: function(data) {
+        show: function (data) {
           return data.listType == "DATERANGE" && data.date.useDateRanges;
         },
-        change: function(data) {
-          data.date.dateRanges[1].label = _.find(dateRangeOptions, function(option) {
+        change: function (data) {
+          data.date.dateRanges[1].label = _.find(dateRangeOptions, function (option) {
             return option.value === data.date.dateRanges[1].value;
           }).label;
         }
@@ -504,7 +504,7 @@ define(["underscore",
         ref: "date.dateRanges.1.label",
         label: "Label date range 02",
         defaultValue: dateRangeOptions[2].label,
-        show: function(data) {
+        show: function (data) {
           return data.listType == "DATERANGE" && data.date.useDateRanges;
         },
       },
@@ -515,11 +515,11 @@ define(["underscore",
         label: "Date range 03",
         defaultValue: dateRangeOptions[3].value,
         options: dateRangeOptions,
-        show: function(data) {
+        show: function (data) {
           return data.listType == "DATERANGE" && data.date.useDateRanges;
         },
-        change: function(data) {
-          data.date.dateRanges[2].label = _.find(dateRangeOptions, function(option) {
+        change: function (data) {
+          data.date.dateRanges[2].label = _.find(dateRangeOptions, function (option) {
             return option.value === data.date.dateRanges[2].value;
           }).label;
         }
@@ -529,7 +529,7 @@ define(["underscore",
         ref: "date.dateRanges.2.label",
         label: "Label date range 03",
         defaultValue: dateRangeOptions[3].label,
-        show: function(data) {
+        show: function (data) {
           return data.listType == "DATERANGE" && data.date.useDateRanges;
         },
       },
@@ -540,11 +540,11 @@ define(["underscore",
         label: "Date range 04",
         defaultValue: dateRangeOptions[4].value,
         options: dateRangeOptions,
-        show: function(data) {
+        show: function (data) {
           return data.listType == "DATERANGE" && data.date.useDateRanges;
         },
-        change: function(data) {
-          data.date.dateRanges[3].label = _.find(dateRangeOptions, function(option) {
+        change: function (data) {
+          data.date.dateRanges[3].label = _.find(dateRangeOptions, function (option) {
             return option.value === data.date.dateRanges[3].value;
           }).label;
         }
@@ -554,7 +554,7 @@ define(["underscore",
         ref: "date.dateRanges.3.label",
         label: "Label date range 04",
         defaultValue: dateRangeOptions[4].label,
-        show: function(data) {
+        show: function (data) {
           return data.listType == "DATERANGE" && data.date.useDateRanges;
         },
       },
@@ -565,11 +565,11 @@ define(["underscore",
         label: "Date range 05",
         defaultValue: dateRangeOptions[11].value,
         options: dateRangeOptions,
-        show: function(data) {
+        show: function (data) {
           return data.listType == "DATERANGE" && data.date.useDateRanges;
         },
-        change: function(data) {
-          data.date.dateRanges[4].label = _.find(dateRangeOptions, function(option) {
+        change: function (data) {
+          data.date.dateRanges[4].label = _.find(dateRangeOptions, function (option) {
             return option.value === data.date.dateRanges[4].value;
           }).label;
         }
@@ -579,7 +579,7 @@ define(["underscore",
         ref: "date.dateRanges.4.label",
         label: "Label date range 05",
         defaultValue: dateRangeOptions[11].label,
-        show: function(data) {
+        show: function (data) {
           return data.listType == "DATERANGE" && data.date.useDateRanges;
         },
       },
@@ -590,11 +590,11 @@ define(["underscore",
         label: "Date range 06",
         defaultValue: dateRangeOptions[17].value,
         options: dateRangeOptions,
-        show: function(data) {
+        show: function (data) {
           return data.listType == "DATERANGE" && data.date.useDateRanges;
         },
-        change: function(data) {
-          data.date.dateRanges[5].label = _.find(dateRangeOptions, function(option) {
+        change: function (data) {
+          data.date.dateRanges[5].label = _.find(dateRangeOptions, function (option) {
             return option.value === data.date.dateRanges[5].value;
           }).label;
         }
@@ -604,7 +604,7 @@ define(["underscore",
         ref: "date.dateRanges.5.label",
         label: "Label date range 06",
         defaultValue: dateRangeOptions[17].label,
-        show: function(data) {
+        show: function (data) {
           return data.listType == "DATERANGE" && data.date.useDateRanges;
         },
       },
@@ -615,11 +615,11 @@ define(["underscore",
         label: "Date range 07",
         defaultValue: dateRangeOptions[19].value,
         options: dateRangeOptions,
-        show: function(data) {
+        show: function (data) {
           return data.listType == "DATERANGE" && data.date.useDateRanges;
         },
-        change: function(data) {
-          data.date.dateRanges[6].label = _.find(dateRangeOptions, function(option) {
+        change: function (data) {
+          data.date.dateRanges[6].label = _.find(dateRangeOptions, function (option) {
             return option.value === data.date.dateRanges[6].value;
           }).label;
         }
@@ -629,7 +629,7 @@ define(["underscore",
         ref: "date.dateRanges.6.label",
         label: "Label date range 07",
         defaultValue: dateRangeOptions[19].label,
-        show: function(data) {
+        show: function (data) {
           return data.listType == "DATERANGE" && data.date.useDateRanges;
         },
       },
@@ -640,11 +640,11 @@ define(["underscore",
         label: "Date range 08",
         defaultValue: dateRangeOptions[21].value,
         options: dateRangeOptions,
-        show: function(data) {
+        show: function (data) {
           return data.listType == "DATERANGE" && data.date.useDateRanges;
         },
-        change: function(data) {
-          data.date.dateRangess[7].label = _.find(dateRangeOptions, function(option) {
+        change: function (data) {
+          data.date.dateRangess[7].label = _.find(dateRangeOptions, function (option) {
             return option.value === data.date.dateRanges[7].value;
           }).label;
         }
@@ -654,7 +654,7 @@ define(["underscore",
         ref: "date.dateRanges.7.label",
         label: "Label date range 08",
         defaultValue: dateRangeOptions[21].label,
-        show: function(data) {
+        show: function (data) {
           return data.listType == "DATERANGE" && data.date.useDateRanges;
         },
       },
@@ -678,7 +678,7 @@ define(["underscore",
         expression: "optional",
         label: "Variable values (comma separated)",
         defaultValue: "",
-        show: function(data) {
+        show: function (data) {
           return data.listType == "VARIABLE";
         },
       },
@@ -686,7 +686,7 @@ define(["underscore",
         type: "boolean",
         ref: "listVisible",
         label: "Visible",
-        show: function(data) {
+        show: function (data) {
           return data.listType != "DATERANGE";
         },
         defaultValue: true,
@@ -790,11 +790,11 @@ define(["underscore",
   var about = {
     //ref: "props.imgSrc",
     //type: "string",
-    component: "pp-cl-horizontalselectionbar",
+    component: "pp-@@extensionnamespace@@extensionnamesafe",
     translation: "Common.About",
-    show: function(data) {
-      console.log('data',data);
-          return true;
+    show: function (data) {
+      console.log('data', data);
+      return true;
     },
     //show: true,
   };

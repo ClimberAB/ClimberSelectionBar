@@ -2,11 +2,15 @@
 # General Settings
 # -------------------------------------------------------------------
 general:
+  # Version of the extension, will be re-used in several areas,
+  # e.g the generated .zip-file in the 'release' Grunt-task
+  Version:              "1.1.6"
+
   # Path to the extension directory in Qlik Sense Desktop
   LocalExtensionPath:   "C:\\Users\\clkaf\\Documents\\Qlik\\Sense\\Extensions"
 
   # Name of the Extension as defined in the generator
-  ExtensionName:        "HorizontalSelectionBar"
+  ExtensionName:        "Climber Selection Bar"
 
   # Name of the Extension, safe to be used for file-names
   ExtensionNameSafe:    "HorizontalSelectionBar"
@@ -17,9 +21,15 @@ general:
   # Description of the Extension as defined in the generator
   ExtensionDescription: "A horizontal selection bar for Qlik Sense. Uses fields, variables and flags."
 
-  # Version of the extension, will be re-used in several areas,
-  # e.g the generated .zip-file in the 'release' Grunt-task
-  Version:              "1.1.4"
+  # Name of the Extension displayed in the property panel
+  AboutExtensionName: "Selection Bar"
+
+  # About url
+  AboutUrl:   "http://goo.gl/hNMWnW"
+
+  # Font size of the about component title
+  AboutTitleFontSize: "27"
+
 
 # -------------------------------------------------------------------
 # Settings for the 'dev' Grunt task

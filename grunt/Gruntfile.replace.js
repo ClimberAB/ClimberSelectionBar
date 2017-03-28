@@ -18,6 +18,30 @@ module.exports = function ( grunt ) {
 					{
 						match: "version",
 						replacement: "<%= projectconfig.general.Version %>"
+					},
+					{
+						match: "extensionnamesafe",
+						replacement: "<%= projectconfig.general.ExtensionNameSafe %>"
+					},
+					{
+						match: "extensionnamespace",
+						replacement: "<%= projectconfig.general.ExtensionNamespace %>"
+					},
+					{
+						match: "extensionname",
+						replacement: "<%= projectconfig.general.ExtensionName %>"
+					},
+					{
+						match: "abouturl",
+						replacement: "<%= projectconfig.general.AboutUrl %>"
+					},
+					{
+						match: "aboutextensionname",
+						replacement: "<%= projectconfig.general.AboutExtensionName %>"
+					},
+					{
+						match: "abouttitlefontsize",
+						replacement: "<%= projectconfig.general.AboutTitleFontSize %>"
 					}
 
 				]
@@ -40,7 +64,32 @@ module.exports = function ( grunt ) {
 					{
 						match: "version",
 						replacement: "<%= projectconfig.general.Version %>"
+					},
+					{
+						match: "extensionnamesafe",
+						replacement: "<%= projectconfig.general.ExtensionNameSafe %>"
+					},
+					{
+						match: "extensionnamespace",
+						replacement: "<%= projectconfig.general.ExtensionNamespace %>"
+					},
+					{
+						match: "extensionname",
+						replacement: "<%= projectconfig.general.ExtensionName %>"
+					},
+					{
+						match: "abouturl",
+						replacement: "<%= projectconfig.general.AboutUrl %>"
+					},
+					{
+						match: "aboutextensionname",
+						replacement: "<%= projectconfig.general.AboutExtensionName %>"
+					},
+					{
+						match: "abouttitlefontsize",
+						replacement: "<%= projectconfig.general.AboutTitleFontSize %>"
 					}
+
 				]
 			},
 			files: [

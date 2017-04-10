@@ -153,6 +153,26 @@ define(["underscore",
           return (data.listType === "FIELD" || data.listType === "FLAG" || data.listType === "DATERANGE") && data.qListObjectDef.qDef.qFieldDefs[0].substring(0, 1) === "=";
         }
       },
+      variable: {
+        type: "string",
+        ref: "variable",
+        label: "Variable",
+        defaultValue: "",
+        show: function (data) {
+          return data.listType == "VARIABLE";
+        },
+        change: function (data) {
+          data.variable != "" ? data.variableValue.qStringExpression.qExpr = "=" + data.variable : "";
+        },
+      },
+      variableValue: {
+        type: "string",
+        expression: "always",
+        expressionType: "dimension",
+        ref: "variableValue.qStringExpression.qExpr",
+        label: "Variable value",
+        show: false,
+      },
       initSelection: {
         type: "string",
         ref: "initSelection",
@@ -310,26 +330,7 @@ define(["underscore",
           return data.customSortOrder && (data.listType == "FIELD" || data.listType == "FLAG");
         },
       },
-      variable: {
-        type: "string",
-        ref: "variable",
-        label: "Variable",
-        defaultValue: "",
-        show: function (data) {
-          return data.listType == "VARIABLE";
-        },
-        change: function (data) {
-          data.variable != "" ? data.variableValue.qStringExpression.qExpr = "=" + data.variable : "";
-        },
-      },
-      variableValue: {
-        type: "string",
-        expression: "always",
-        expressionType: "dimension",
-        ref: "variableValue.qStringExpression.qExpr",
-        label: "Variable value",
-        show: false,
-      },
+      
       dateDefaultText: {
         type: "string",
         ref: "date.defaultText",
@@ -748,6 +749,9 @@ define(["underscore",
     }, {
       value: "STACK",
       label: "Stack",
+    },{
+      value: "NONE",
+      label: "None",
     }],
   };
 
@@ -788,16 +792,18 @@ define(["underscore",
   };
 
   var about = {
-    //ref: "props.imgSrc",
-    //type: "string",
     component: "pp-@@extensionnamespace@@extensionnamesafe",
     translation: "Common.About",
-    show: function (data) {
-      console.log('data', data);
-      return true;
-    },
-    //show: true,
+    show: true,
   };
+
+  var aboutPanel = {
+		translation: "Common.About",
+		type: "items",
+		items: {
+			about: about,
+		}
+	};
 
   // Appearance Panel
   var appearancePanel = {
@@ -811,8 +817,7 @@ define(["underscore",
           alignMode: alignMode,
           showLabels: showLabels,
         },
-      },
-      about: about,
+      }
     },
   };
 
@@ -824,6 +829,7 @@ define(["underscore",
       lists: lists,
       initSelectionSettings: initSelectionPanel,
       appearance: appearancePanel,
+      about: aboutPanel,
     },
   };
 });

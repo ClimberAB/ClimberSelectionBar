@@ -100,13 +100,7 @@ define([
       },
 
       resize: function ($element, layout) {
-        this.$scope.setSizeMode($element);
-        //Remove header if new card theme.
-        if ($(".qv-card" && !layout.showTitles)) {
-          $(".qv-object-cl-horizontalselectionbar").find('header.thin').addClass('no-title');
-        } else {
-          $(".qv-object-cl-horizontalselectionbar").find('header.thin').removeClass('no-title');
-        };
+         this.paint($element, layout);
       },
 
       paint: function ($element, layout) {

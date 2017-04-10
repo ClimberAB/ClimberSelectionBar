@@ -1,4 +1,4 @@
-<div ng-cloak class="cl-inner-container" ng-class="layout.props.floatMode" qv-extension id="container" style="height: 100%; width: 100%; position: relative; overflow: auto;" ng-class="getClass()">
+<div ng-cloak class="cl-inner-container" ng-class="props.floatMode" qv-extension id="container" style="height: 100%; width: 100%; position: relative; overflow: auto;" ng-class="getClass()">
 <!--div class="bootstrap">
 	<div id="daterange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
     	<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
@@ -9,7 +9,7 @@
 	<div ng-cloak ng-repeat="field in fields"
 		on-last-repeat
 		ng-if="showField(field)"
-		class="container {{layout.props.floatMode}}"
+		class="container {{props.floatMode}}"
 		ng-class="getSizeMode()">
 		<div ng-cloak class="container-label"><span ng-show="layout.props.showLabels">{{field.label}}</span><div>
 		<div class="lui-buttongroup" style="overflow: hidden;" ng-if="field.type == 'FIELD' || field.type === 'FLAG'">

@@ -3,4 +3,9 @@ v0.0.1:
   new:
     - Initial Commit
   enhancements:
-  
+v1.2.0:
+  date: "2017-06-01"
+  new:
+  enhancements:
+    - Fixed offset bug for today, min & max
+    - Better responsive behavior

@@ -1,37 +1,31 @@
-<div ng-cloak class="cl-inner-container" ng-class="props.floatMode" qv-extension id="container" style="height: 100%; width: 100%; position: relative; overflow: auto;" ng-class="getClass()">
-<!--div class="bootstrap">
+<div ng-cloak class="cl-inner-container" ng-class="props.floatMode" qv-extension id="container" style="height: 100%; width: 100%; position: relative; overflow: auto;"
+ ng-class="getClass()">
+	<!--div class="bootstrap">
 	<div id="daterange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
     	<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
     	<span></span> <b class="caret"></b>
 	</div>
 </div> <-->
-	
-	<div ng-cloak ng-repeat="field in fields"
-		on-last-repeat
-		ng-if="showField(field)"
-		class="container {{props.floatMode}}"
-		ng-class="getSizeMode()">
-		<div ng-cloak class="container-label"><span ng-show="layout.props.showLabels">{{field.label}}</span><div>
-		<div class="lui-buttongroup" style="overflow: hidden;" ng-if="field.type == 'FIELD' || field.type === 'FLAG'">
-			<button ng-repeat="item in field.data"
-			class="lui-button {{field.type}}"
-			ng-class="item[0].qState"
-			cl-swipestart="onSwipeStart($event)"
-			cl-swipeupdate="onSwipeUpdate($event)"
-			cl-swipecancel="onSwipeCancel($event)"
-			cl-swipe="onSwipe($event)"
-			datavalue="{{item[0].qElemNumber}}"
-			field="{{field.id}}"
-			ng-click="selectElemNo($event, field.id, item[0].qElemNumber, true)"><span ng-if="field.type == 'FIELD'">{{item[0].qText}}</span><img ng-if="field.type == 'FLAG'" ng-src="{{item.icon}}"></button>
+
+	<div ng-cloak ng-repeat="field in fields" on-last-repeat ng-if="showField(field)" class="container {{props.floatMode}}" ng-class="getSizeMode()">
+		<div class="container-label container-label--{{layout.props.alignLabel}} container-label--{{getSizeMode()}}">
+			<span ng-show="layout.kfLists{{[field.id]}}.showLabels">{{field.label}}</span>
+			<span ng-hide="layout.kfLists{{[field.id]}}.showLabels" style="display:inline-block"></span>
 		</div>
-		<div ng-cloak  class="bootstrap-horizontalselectionbar" ng-if="field.type == 'DATERANGE'" title="{{ field.isNotARange ? 'Selection is not a range' : field.displayText}}">
+		<div class="lui-buttongroup" style="overflow: hidden;" ng-if="field.type == 'FIELD' || field.type === 'FLAG'">
+			<button ng-repeat="item in field.data" class="lui-button {{field.type}}" ng-class="item[0].qState" cl-swipestart="onSwipeStart($event)"
+			 cl-swipeupdate="onSwipeUpdate($event)" cl-swipecancel="onSwipeCancel($event)" cl-swipe="onSwipe($event)" datavalue="{{item[0].qElemNumber}}"
+			 field="{{field.id}}" ng-click="selectElemNo($event, field.id, item[0].qElemNumber, true)"><span ng-if="field.type == 'FIELD'">{{item[0].qText}}</span><img ng-if="field.type == 'FLAG'" ng-src="{{item.icon}}"></button>
+		</div>
+		<div ng-cloak class="bootstrap-horizontalselectionbar" ng-if="field.type == 'DATERANGE'" title="{{ field.isNotARange ? 'Selection is not a range' : field.displayText}}"
+		 style="display:inline-flex">
 			<div id="{{'daterange-' + $parent.qId + '-' + field.id}}" class="pull-right" style="background: #fff; cursor: pointer; padding: 4px 10px; border: 1px solid #ccc; width: 100%">
-    			<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
-    			<i class="glyphicon glyphicon-exclamation-sign fa fa-exclamation-circle" ng-if="field.isNotARange" style="color:red"></i>
+				<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
+				<i class="glyphicon glyphicon-exclamation-sign fa fa-exclamation-circle" ng-if="field.isNotARange" style="color:red"></i>
 				<span class="daterange-input">{{field.displayText}}</span> <b class="caret"></b>
 			</div>
 		</div>
-		<div ng-cloak ng-if="field.type == 'VARIABLE'">
+		<div ng-cloak ng-if="field.type == 'VARIABLE'" style="display:inline-flex">
 			<label ng-repeat="item in field.data" class="lui-radiobutton">
 				<input class="lui-radiobutton__input" type="radio" ng-model="field.variableValue" ng-value="item.value" ng-change="setVariable(field.variable, item.value)">
 				<div

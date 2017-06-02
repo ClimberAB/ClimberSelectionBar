@@ -9,3 +9,8 @@ v1.2.0:
   enhancements:
     - Fixed offset bug for today, min & max
     - Better responsive behavior
+v1.2.1:
+  date: "2017-06-02"
+  new:
+  enhancements:
+    - Fixed weekday offset bug

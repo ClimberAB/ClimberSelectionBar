@@ -23,7 +23,10 @@
 ```
 ### Versions
 
+* Extension version:
 * Browser: 
 * Qlik Sense: 
 * Operating system: 
 * [Other relevant versions]
+
+### Screenshots

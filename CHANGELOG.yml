@@ -14,3 +14,8 @@ v1.2.1:
   new:
   enhancements:
     - Fixed weekday offset bug
+v1.2.3:
+  date: "2017-08-09"
+  new: Added R11 to Date Ranges
+  enhancements:
+  

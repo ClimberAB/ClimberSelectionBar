@@ -30,6 +30,24 @@
 > SOFTWARE.
 > 
 
+**extensionUtils**
+* Name: extensionUtils
+* License: The MIT License (MIT) Copyright (c) 2015
+* Url: https://github.com/stefanwalther/sense-extension-utils
+* Author: Stefan Walther
+
+**moment**
+* Name:moment
+* License: The MIT License (MIT)
+* Url: https://github.com/moment/moment
+* Author: 
+
+**daterangepicker**
+* Name:daterangepicker
+* License: Copyright (c) 2012-2015
+* Url: http://www.daterangepicker.com/
+* Author: Dan Grossman
+
 ---
 
 

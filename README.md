@@ -49,6 +49,21 @@ Works only with Qlik Sense 3.0 and up!!
 5. Stack - All lists on top of eachother. (Works when using more than one grid height of the selection bar. Also good for smaller screens.)
 ![Alt text](./screenshots/screenshot_align_stacked.PNG?raw=true "Align Stacked")
 
+## Climber Extensions
+Like this extension? Check out the other Climber made extensions below.
+
+**Custom Report**
+* https://github.com/ClimberAB/ClimberCustomReport
+* https://www.youtube.com/watch?v=mCb2t4aNppE
+
+**KPI**
+* https://github.com/ClimberAB/ClimberKPI
+* https://www.youtube.com/watch?v=9zdfYshNel4
+
+**Cards**
+* https://github.com/ClimberAB/ClimberCards
+* https://www.youtube.com/watch?v=k_IEt8TvB_c
+
 ## Contributing
 Contributing to this project is welcome. The process to do so is outlined below:
 

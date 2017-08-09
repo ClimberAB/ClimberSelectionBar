@@ -8,10 +8,11 @@
 </div> <-->
 
 	<div ng-cloak ng-repeat="field in fields" on-last-repeat ng-if="showField(field)" class="container {{props.floatMode}}" ng-class="getSizeMode()">
-		<div class="container-label container-label--{{layout.props.alignLabel}} container-label--{{getSizeMode()}}">
-			<span ng-show="layout.kfLists{{[field.id]}}.showLabels">{{field.label}}</span>
-			<span ng-hide="layout.kfLists{{[field.id]}}.showLabels" style="display:inline-block"></span>
+		<div ng-if="showLabels()" class="container-label container-label--{{layout.props.alignLabel}} container-label--{{getSizeMode()}}">
+			<span class="container-span container-span--{{layout.props.alignLabel}}" ng-if="field.label || layout.props.alignLabel === 'TOP'">{{field.label}}</span>
+			
 		</div>
+
 		<div class="lui-buttongroup" style="overflow: hidden;" ng-if="field.type == 'FIELD' || field.type === 'FLAG'">
 			<button ng-repeat="item in field.data" class="lui-button {{field.type}}" ng-class="item[0].qState" cl-swipestart="onSwipeStart($event)"
 			 cl-swipeupdate="onSwipeUpdate($event)" cl-swipecancel="onSwipeCancel($event)" cl-swipe="onSwipe($event)" datavalue="{{item[0].qElemNumber}}"
@@ -19,7 +20,7 @@
 		</div>
 		<div ng-cloak class="bootstrap-horizontalselectionbar" ng-if="field.type == 'DATERANGE'" title="{{ field.isNotARange ? 'Selection is not a range' : field.displayText}}"
 		 style="display:inline-flex">
-			<div id="{{'daterange-' + $parent.qId + '-' + field.id}}" class="pull-right" style="background: #fff; cursor: pointer; padding: 4px 10px; border: 1px solid #ccc; width: 100%">
+			<div id="{{'daterange-' + $parent.qId + '-' + field.id}}" class="pull-right" style="background: #fff; cursor: pointer; padding: 2px 10px; border: 1px solid #ccc; width: 100%">
 				<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
 				<i class="glyphicon glyphicon-exclamation-sign fa fa-exclamation-circle" ng-if="field.isNotARange" style="color:red"></i>
 				<span class="daterange-input">{{field.displayText}}</span> <b class="caret"></b>

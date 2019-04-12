@@ -1,0 +1,133 @@
+v0.0.1:
+  date: "2016-06-22"
+  new:
+    - Initial Commit
+  enhancements:
+v1.2.0:
+  date: "2017-06-01"
+  new:
+  enhancements:
+    - Fixed offset bug for today, min & max
+    - Better responsive behavior
+v1.2.1:
+  date: "2017-06-02"
+  new:
+  enhancements:
+    - Fixed weekday offset bug
+v1.2.3:
+  date: "2017-08-09"
+  new: Added R11 to Date Ranges
+  enhancements:
+v1.2.4:
+  date: "2017-08-09"
+  new: 
+  enhancements: Fixed bug for not showing alternative values
+v1.2.5:
+  date: "2017-08-30"
+  new: 
+  enhancements: Enabled exporting
+v1.2.6:
+  date: "2017-12-01"
+  new: Button for links that can be used for document chaining
+  enhancements: 
+v1.2.7:
+  date: "2017-12-11"
+  new:  Single date picker
+  enhancements: Fixed a bug where wrong date were selected when user was in another time zone 
+v1.2.8:
+  date: "2017-12-14"
+  new: changed default value for show list labels to true.
+  enhancements: 
+v1.2.9:
+  date: "2017-12-14"
+  new: changed default value for align list labels to top.
+  enhancements: 
+v1.3:
+  date: "2018-01-12"
+  new: Added export button
+       Option to hide snapshot/maximize icon
+  enhancements: 
+v1.4:
+  date: "2018-02-01"
+  new: Added smaller container in mobile mode
+  enhancements: 
+      Fixed bug with weekdays not showing properly
+      Fixed bug date ranges Last Week and This Week always started on a Sunday
+      Fixed bug with button not showing
+      Fixed bug daterangepicker element not removed and showing in mobile
+ v1.4.1:
+  date: "2018-02-02"
+  new: 
+  enhancements: 
+      Updated readme
+ v1.4.2:
+  date: "2018-03-11"
+  new: 
+  enhancements: 
+      New preview logo and about panel
+
+ v1.4.3:
+  date: "2018-03-16"
+  new: 
+  enhancements: 
+      Added export services and mashup bug
+
+ v1.4.4:
+  date: "2018-04-10"
+  new: 
+  enhancements: 
+      Export to PDF/Png fix
+
+ v1.4.5:
+  date: "2018-05-17"
+  new: 
+  enhancements: 
+      Changed the American flag icon
+
+  v1.5.0:
+  date: "2018-06-19"
+  new: 
+  enhancements: 
+      Qlik sense june 2018 update
+      
+  v1.5.1:
+  date: "2018-06-19"
+  new: 
+  enhancements: 
+      Snapshot fix
+  
+  v1.5.2:
+  date: "2018-07-06"
+  new: 
+  enhancements: 
+      Issue 45 bug fix "Initial selection not working properly with Button added."
+
+  v1.5.3:
+  date: "2018-08-15"
+  new: 
+  enhancements: 
+      Issue 74 bug fix "Daterangepicker is shown in mashup on init"
+
+  v1.5.4:
+  date: "2018-11-19"
+  new: 
+  enhancements: 
+      Added EU flag
+  
+  v1.6.0:
+  date: "2018-12-03"
+  new: 
+  enhancements: 
+    Support for November 2018
+    Always one selected
+    Bundle information
+
+  v1.6.1:
+  date: "2019-03-19"
+  new: 
+  enhancements: 
+    Support for February 2019
+  fixes:
+    stateUtil does not always trigger isInAnalysisMode()
+
+

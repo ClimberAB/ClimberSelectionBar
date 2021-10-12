@@ -1,5 +1,5 @@
-# Climber Selection Bar
-<a href="http://www.climberextensions.com/" target="_blank"><img src="./screenshots/downloadbutton.png?raw=true" 
+# Climber Selection Bar (Deprecated and replaced with Vizlib Toolbar)
+<a href="https://home.vizlib.com/vizlib-self-service-for-qlik-sense/" target="_blank"><img src="./screenshots/downloadbutton.png?raw=true" 
 alt="Download latest release" width="400" height="40" border="0" /></a>  
 > Horizontal selection bar with initial selection capabilities. Selections through both click and swipes. The Selection bar also handle setting variables and showing flags that can be used for selections. Typical use case is as a top bar with Year, Month, Country selections and variable settings for currencies and budget/forcast alternatives. 
 > See more in this video: https://youtu.be/4fxrphADRKw
